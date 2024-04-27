@@ -14,11 +14,47 @@ type apiConfigData struct {
 	OpenWeatherMapApiKey string `json: "OpenWeatherMapApiKey"`
 }
 
+type Weather struct {
+	Id          int32  `json:"id"`
+	Main        string `json:"main"`
+	Description string `json:"description"`
+	Icon        string `json:"icon"`
+}
+
 type weatherData struct {
 	Name string `json:"name"`
+
+	Coord struct {
+		Longitute float64 `json:"lon"`
+		Latitude  float64 `json:"lat"`
+	}
+
+	Weather []Weather `json:"weather"`
+
 	Main struct {
-		Kelvin float64 `json:"temp"`
+		Kelvin       float64 `json:"temp"`
+		Humidity     float64 `json:"humidity"`
+		Pressure     float64 `json:"pressure"`
+		Feels_like   float64 `json:"feels_like"`
+		Temp_min     float64 `json:"temp_min"`
+		Temp_max     float64 `json:"temp_max"`
+		Sea_level    int     `json:"sea_level"`
+		Ground_level int     `json:"ground_level"`
 	} `json:"main"`
+
+	Visibility int32 `json:"visibility"`
+
+	Wind struct {
+		Speed float64 `json:"speed"`
+		Deg   int32   `json:"deg"`
+		Gust  float64 `json:"gust"`
+	}
+
+	Cloud struct {
+		All int32 `json:"all"`
+	}
+
+	Timezone int32 `json:"timezone"`
 }
 
 func loadApiCongfig(filename string) (apiConfigData, error) {
