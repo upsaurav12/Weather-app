@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { WeatherData } from "./type";
-import axios from "axios";
+import { WeatherData, ForecastData } from "./type"; // Ensure you import ForecastData
 import './weather.css';
+import axios from 'axios'; 
 
 const Weather: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [weatherForecast, setWeatherForecast] = useState<WeatherData | null>(null);
+  const [weatherForecast, setWeatherForecast] = useState<ForecastData | null>(null); // Update type here
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,7 +38,7 @@ const Weather: React.FC = () => {
       return response.json();
     }
 
-    async function getWeatherForecast(lat: number, lon: number): Promise<WeatherData> {
+    async function getWeatherForecast(lat: number, lon: number): Promise<ForecastData> {
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
       );
@@ -52,30 +52,27 @@ const Weather: React.FC = () => {
 
     async function showWeatherforForecast() {
       try {
-        const position = await  getUserLocation();
-        const {latitude , longitude} = position.coords;
+        const position = await getUserLocation();
+        const { latitude, longitude } = position.coords;
 
+        const weatherForecast = await getWeatherForecast(latitude, longitude);
+        setWeatherForecast(weatherForecast);
 
-        const weatherForecast = await getWeatherForecast(latitude , longitude);
-        setWeatherForecast(weatherForecast)
-
-        setLoading(false)
-      } catch(error) {
-        console.error('Failed to get Data :' ,error)
-        setError('Unable to retrieve WEather forecast data : ', )
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to get Data :', error);
+        setError('Unable to retrieve Weather forecast data.');
         setLoading(false);
       }
     }
 
     async function showWeatherForCurrentLocation() {
       try {
-        // Get user's current location
         const position = await getUserLocation();
         const { latitude, longitude } = position.coords;
 
-        // Fetch weather data for the current location
         const weatherData = await getWeatherData(latitude, longitude);
-        setWeatherData(weatherData); // Set the weather data in state
+        setWeatherData(weatherData);
         setLoading(false);
       } catch (error) {
         console.error('Failed to get weather data:', error);
@@ -84,7 +81,6 @@ const Weather: React.FC = () => {
       }
     }
 
-    // Call the function to show weather data for the user's location
     showWeatherforForecast();
     showWeatherForCurrentLocation();
   }, []);
@@ -121,10 +117,29 @@ const Weather: React.FC = () => {
           <div className="map-container"></div>
         </div>
       )}
-      <div className="lower-info flex">
-        <div className="forecast-next"></div>
-        <div className="pollution"></div>
+      {/* 
+        
+      */}
+        {weatherForecast && (
+  <div className="forecast-next">
+    <h2>5-Day Forecast</h2>
+    <div className="forecast-items">
+      {weatherForecast.list.slice(0, 4).map((forecast, index) => (
+        <div key={index} className="forecast-item">
+          <p>{new Date(forecast.dt * 1000).toLocaleString()}</p>
+          <p>Temp: {forecast.main.temp}°C</p>
+          <p>{forecast.weather[0].description}</p>
+          <img 
+            src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`} 
+            alt={forecast.weather[0].description} 
+          />
+        </div>
+      ))}
     </div>
+  </div>
+)}
+
+
     </main>
   );
 };
