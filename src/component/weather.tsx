@@ -121,23 +121,10 @@ const Weather: React.FC = () => {
           <div className="map-container"></div>
         </div>
       )}
-      {weatherForecast && (
-        <div className="lower-info flex">
-          <div className="forecast-next">
-            <h2>5-Day Forecast</h2>
-            <div className="forecast-container">
-              {weatherForecast.list.map((forecast, index) => (
-                <div key={index} className="forecast-item">
-                  <div>{new Date(forecast.dt * 1000).toLocaleString()}</div>
-                  <div>Temperature: {forecast.main.temp}°C</div>
-                  <div>Weather: {forecast.weather[0].description}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="pollution"></div>
-        </div>
-      )}
+      <div className="lower-info flex">
+        <div className="forecast-next"></div>
+        <div className="pollution"></div>
+    </div>
     </main>
   );
 };
