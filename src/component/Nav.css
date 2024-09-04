@@ -1,0 +1,14 @@
+.navbar {
+    height: 90vh;
+    width: 15vw;
+    margin: 25px 0 50px 40px;
+    border-radius: 10px;
+}
+
+.navbar ul {
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+    align-items: center;
+    justify-content: space-around;
+}

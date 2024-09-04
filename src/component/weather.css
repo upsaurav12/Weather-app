@@ -1,0 +1,60 @@
+main {
+    margin: 25px 0 50px 0;
+    width: 80%;
+    border-radius: 10px;
+}
+
+.upper-hightlight{ 
+    border: 1px solid;
+    height: 75px;
+    margin: 2px auto 3px 5px;
+    width: 98%;
+    border-radius: 10px;
+}
+
+.about-weather{ 
+    border: 1px solid;
+    height: 20rem;
+    border-radius: 10px;
+    width: 55%;
+    margin:0 5px;
+}
+
+.map-container{
+    height: 20rem;
+    width: 42.5%;
+    border-radius: 10px;
+    border: 1px solid;
+    margin: 0px px;
+}
+
+.profile-circle {
+    width: 60px;
+    height: 60px;
+    border: 1px solid;
+    margin: 6px;
+    border-radius: 50%;
+}
+
+.upper-hightlight-right {
+    border: 1px solid;
+    width: 70px;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.forecast-next{ 
+    border: 1px solid;
+    height: 18.125rem;
+    border-radius: 10px;
+    width: 55%;
+    margin: 3px 5px;
+}
+
+.pollution{
+    height: 18rem;
+    width: 42.5%;
+    border-radius: 10px;
+    border: 1px solid;
+    margin: 3px 1px;
+}
