@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { WeatherData, ForecastData } from "./type"; // Ensure you import ForecastData
+import { WeatherData, ForecastData, Pollution } from "./type"; // Ensure you import ForecastData
 import './weather.css';
-import axios from 'axios'; 
 
 const Weather: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [weatherForecast, setWeatherForecast] = useState<ForecastData | null>(null); // Update type here
+  const [pollutionData , setPollutionData] = useState<Pollution | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,6 +24,19 @@ const Weather: React.FC = () => {
           reject(new Error("Geolocation is not supported by this browser."));
         }
       });
+    }
+
+
+    async function getPollution(lat: number , lon: number): Promise<Pollution> {
+      const response = await fetch(
+        `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`
+      )
+
+      if(!response.ok) {
+        throw new Error(`Error in fetching Pollution Data: ${response.statusText}`)
+      }
+
+      return response.json()
     }
 
     async function getWeatherData(lat: number, lon: number): Promise<WeatherData> {
@@ -66,6 +79,21 @@ const Weather: React.FC = () => {
       }
     }
 
+    async function showPollution() {
+      try {
+        const position = await getUserLocation();
+        const {latitude , longitude} = position.coords;
+
+
+        const pollution = await getPollution(latitude , longitude);
+        setPollutionData(pollution);
+      } catch (error) {
+        console.error("Failed", error)
+        setError('Unable to retreive pollution data ')
+        setLoading(false)
+      }
+    }
+
     async function showWeatherForCurrentLocation() {
       try {
         const position = await getUserLocation();
@@ -83,6 +111,7 @@ const Weather: React.FC = () => {
 
     showWeatherforForecast();
     showWeatherForCurrentLocation();
+    showPollution();
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -117,29 +146,43 @@ const Weather: React.FC = () => {
           <div className="map-container"></div>
         </div>
       )}
-      {/* 
-        
-      */}
-        {weatherForecast && (
-  <div className="forecast-next">
-    <h2>5-Day Forecast</h2>
-    <div className="forecast-items">
-      {weatherForecast.list.slice(0, 4).map((forecast, index) => (
-        <div key={index} className="forecast-item">
-          <p>{new Date(forecast.dt * 1000).toLocaleString()}</p>
-          <p>Temp: {forecast.main.temp}°C</p>
-          <p>{forecast.weather[0].description}</p>
-          <img 
-            src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`} 
-            alt={forecast.weather[0].description} 
-          />
-        </div>
-      ))}
-    </div>
-  </div>
-)}
 
+      <div className="lower-info flex">
+      {weatherForecast && (
+                  <div className="forecast-next">
+                    <h2 className="text-3xl ml-4 mt-2">5-Day Forecast</h2>
+                    <div className="forecast-items ml-4 mt-4">
+                      {weatherForecast.list.slice(0, 4).map((forecast, index) => (
+                        <div key={index} className="forecast-item">
+                          <p>{new Date(forecast.dt * 1000).toLocaleString()}</p>
+                          <p>Temp: {forecast.main.temp}°C</p>
+                          <p>{forecast.weather[0].description}</p>
+                          <img 
+                            src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`} 
+                            alt={forecast.weather[0].description} 
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
+        {pollutionData && (
+                  <div className="pollution">
+                    <h2 className="text-3xl">Pollution Data</h2>
+                    <div className="pollution-details">
+                      <p>Air Quality Index (AQI): {pollutionData.list[0].main.aqi}</p>
+                      <p>CO: {pollutionData.list[0].components.co} µg/m³</p>
+                      <p>NO: {pollutionData.list[0].components.no} µg/m³</p>
+                      <p>NO₂: {pollutionData.list[0].components.no2} µg/m³</p>
+                      <p>O₃: {pollutionData.list[0].components.o3} µg/m³</p>
+                      <p>PM2.5: {pollutionData.list[0].components.pm2_5} µg/m³</p>
+                      <p>PM10: {pollutionData.list[0].components.pm10} µg/m³</p>
+                      <p>NH₃: {pollutionData.list[0].components.nh3} µg/m³</p>
+                    </div>
+                  </div>
+                )}
+      </div>
     </main>
   );
 };

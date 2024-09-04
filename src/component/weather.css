@@ -103,3 +103,63 @@ main {
     font-size: 14px;
   }
   
+
+  .forecast-next {
+    border: 1px solid;
+    height: 18.125rem;
+    border-radius: 10px;
+    width: 55%;
+    margin: 3px 5px;
+    overflow-y: auto;
+  }
+  
+  .pollution {
+    height: 18rem;
+    width: 42.5%;
+    border-radius: 10px;
+    border: 1px solid;
+    margin-right: 22px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .pollution-details p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .forecast-items {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+  
+  .forecast-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .forecast-item img {
+    margin-top: 10px;
+  }
+  
+  .forecast-item p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .lower-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
