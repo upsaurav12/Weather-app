@@ -65,7 +65,7 @@ const Weather: React.FC = () => {
 
     async function getPastPollution(lat: number, lon: number, start: number, end: number): Promise<Pollution> {
       const response = await fetch(
-        `http://api.openweathermap.org/data/2.5/air_pollution/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${apiKey}`
+        `https://api.openweathermap.org/data/2.5/air_pollution/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${apiKey}`
       );
 
       if (!response.ok) {
