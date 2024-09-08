@@ -5,12 +5,12 @@ const Nav: React.FC = () => {
     return (
         <nav className="navbar border-2 border-black">
             <ul>
-                <li>Home</li>
-                <li>Navigation</li>
-                <li>User</li>
-                <li>Maps</li>
-                <li>Notifications</li>
-                <li>Setting</li>
+                <li>H</li>
+                <li>N</li>
+                <li>U</li>
+                <li>M</li>
+                <li>N</li>
+                <li>S</li>
             </ul>
         </nav>
     )

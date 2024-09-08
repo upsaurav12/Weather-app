@@ -1,165 +1,102 @@
 main {
-    margin: 25px 0 50px 0;
-    width: 80%;
-    border-radius: 10px;
+  margin: 25px 0;
+  width: 100%;
+  border-radius: 10px;
 }
 
-.upper-hightlight{ 
-    border: 1px solid;
-    height: 75px;
-    margin: 2px auto 3px 5px;
-    width: 98%;
-    border-radius: 10px;
+.upper-info {
+  /* Adjusted height to take the space of the removed upper-hightlight */
+  height: 22rem;  /* You can adjust this value */
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;  /* Space between upper-info and lower-info */
 }
 
-.about-weather{ 
-    border: 1px solid;
-    height: 20rem;
-    border-radius: 10px;
-    width: 55%;
-    margin:0 5px;
+.about-weather { 
+  border: 1px solid;
+  /* Set height to fit well within the new upper-info size */
+  height: 100%;
+  width: 25%;
+  border-radius: 10px;
+  margin: 0 5px;
+  margin-left: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
-.map-container{
-    height: 20rem;
-    width: 42.5%;
-    border-radius: 10px;
-    border: 1px solid;
-    margin: 0px px;
+.map-container {
+  /* Adjust width and height to match the new layout */
+  height: 100%;
+  width: 65%;
+  border-radius: 10px;
+  border: 1px solid;
+  margin: 0 5px;
+  margin-right: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px;
 }
 
-.profile-circle {
-    width: 60px;
-    height: 60px;
-    border: 1px solid;
-    margin: 6px;
-    border-radius: 50%;
+.forecast-next { 
+  border: 1px solid;
+  height: 19.5rem;
+  width: 30%;
+  border-radius: 10px;
+  margin: 3px 5px;
+  margin-left: 56px;
 }
 
-.upper-hightlight-right {
-    border: 1px solid;
-    width: 70px;
-    height: 30px;
-    border-radius: 10px;
+.pollution {
+  height: 19.5rem;
+  width: 59.5%;
+  border-radius: 10px;
+  border: 1px solid;
+  margin: 3px 5px;
+  margin-right: 50px;
+  padding: 10px;
 }
 
-.forecast-next{ 
-    border: 1px solid;
-    height: 18.125rem;
-    border-radius: 10px;
-    width: 55%;
-    margin: 3px 5px;
+.lower-info {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.pollution{
-    height: 18rem;
-    width: 42.5%;
-    border-radius: 10px;
-    border: 1px solid;
-    margin: 3px 1px;
+.forecast-item, .pollution-item {
+  font-size: 14px;
+  margin: 5px 0;
+  text-align: center;
 }
 
+/* Flexbox container to hold temperature, humidity, and wind speed */
+.weather-info-container {
+  display: flex;
+  position: relative;
+  top: -30px;
+  justify-content: space-around; /* Evenly space the boxes */
+  width: 80%;
+  margin: auto; /* Take full width of map-container */
+  padding: 18px;
+}
 
-.forecast-container {
-    margin: 20px 0;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
-  
-  .forecast-container h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    text-align: center;
-  }
-  
-  .forecast-items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-  
-  .forecast-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 150px;
-    padding: 15px;
-    margin: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .forecast-item img {
-    margin-top: 10px;
-  }
-  
-  .forecast-item p {
-    margin: 5px 0;
-    font-size: 14px;
-  }
-  
+/* Individual weather boxes for temperature, humidity, and wind speed */
+.weather-box {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  padding: 10px;
+  margin: 0 5px;
+}
 
-  .forecast-next {
-    border: 1px solid;
-    height: 18.125rem;
-    border-radius: 10px;
-    width: 55%;
-    margin: 3px 5px;
-    overflow-y: auto;
-  }
-  
-  .pollution {
-    height: 18rem;
-    width: 42.5%;
-    border-radius: 10px;
-    border: 1px solid;
-    margin-right: 22px;
-    padding: 10px;
-    background-color: #f9f9f9;
-  }
-  
-  .pollution-details p {
-    margin: 5px 0;
-    font-size: 14px;
-  }
-  
-  .forecast-items {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-  }
-  
-  .forecast-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #fff;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .forecast-item img {
-    margin-top: 10px;
-  }
-  
-  .forecast-item p {
-    margin: 5px 0;
-    font-size: 14px;
-  }
-  
-  .lower-info {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-  

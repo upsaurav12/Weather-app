@@ -4,14 +4,15 @@ import './weather.css';
 
 const Weather: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
-  const [weatherForecast, setWeatherForecast] = useState<ForecastData | null>(null); // Update type here
-  const [pollutionData , setPollutionData] = useState<Pollution | null>(null);
+  const [weatherForecast, setWeatherForecast] = useState<ForecastData | null>(null);
+  //const [pollutionData, setPollutionData] = useState<Pollution | null>(null);
+  const [pastPollution, setPastPollution] = useState<Pollution | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const apiKey = '2b02841851fadfe717b1834b2074c944';
-    
+
     async function getUserLocation(): Promise<GeolocationPosition> {
       return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
@@ -25,19 +26,18 @@ const Weather: React.FC = () => {
         }
       });
     }
-
-
-    async function getPollution(lat: number , lon: number): Promise<Pollution> {
+/*
+    async function getPollution(lat: number, lon: number): Promise<Pollution> {
       const response = await fetch(
         `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`
-      )
+      );
 
-      if(!response.ok) {
-        throw new Error(`Error in fetching Pollution Data: ${response.statusText}`)
+      if (!response.ok) {
+        throw new Error(`Error in fetching Pollution Data: ${response.statusText}`);
       }
 
-      return response.json()
-    }
+      return response.json();
+    }*/
 
     async function getWeatherData(lat: number, lon: number): Promise<WeatherData> {
       const response = await fetch(
@@ -57,10 +57,44 @@ const Weather: React.FC = () => {
       );
 
       if (!response.ok) {
-        throw new Error(`Error fetching weather data: ${response.statusText}`);
+        throw new Error(`Error fetching weather forecast data: ${response.statusText}`);
       }
 
       return response.json();
+    }
+
+    async function getPastPollution(lat: number, lon: number, start: number, end: number): Promise<Pollution> {
+      const response = await fetch(
+        `http://api.openweathermap.org/data/2.5/air_pollution/history?lat=${lat}&lon=${lon}&start=${start}&end=${end}&appid=${apiKey}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error While fetching past pollution data: ${response.statusText}`);
+      }
+
+      return response.json();
+    }
+
+    async function showPollutionPast() {
+      try {
+        const position = await getUserLocation();
+        const { latitude, longitude } = position.coords;
+
+        const endDate = new Date();
+        const endUnix = Math.floor(endDate.getTime() / 1000);
+
+        const startDate = new Date();
+        startDate.setDate(endDate.getDate() - 7);
+        const startUnix = Math.floor(startDate.getTime() / 1000);
+
+        const pastPollution = await getPastPollution(latitude, longitude, startUnix, endUnix);
+        setPastPollution(pastPollution);
+      } catch (error) {
+        console.error("Error:", error);
+        setError('Unable to fetch past pollution data.');
+      } finally {
+        setLoading(false);
+      }
     }
 
     async function showWeatherforForecast() {
@@ -70,29 +104,26 @@ const Weather: React.FC = () => {
 
         const weatherForecast = await getWeatherForecast(latitude, longitude);
         setWeatherForecast(weatherForecast);
-
-        setLoading(false);
       } catch (error) {
-        console.error('Failed to get Data :', error);
-        setError('Unable to retrieve Weather forecast data.');
+        console.error('Failed to get forecast data:', error);
+        setError('Unable to retrieve weather forecast data.');
+      } finally {
         setLoading(false);
       }
     }
-
+/*
     async function showPollution() {
       try {
         const position = await getUserLocation();
-        const {latitude , longitude} = position.coords;
+        const { latitude, longitude } = position.coords;
 
-
-        const pollution = await getPollution(latitude , longitude);
+        const pollution = await getPollution(latitude, longitude);
         setPollutionData(pollution);
       } catch (error) {
-        console.error("Failed", error)
-        setError('Unable to retreive pollution data ')
-        setLoading(false)
+        console.error('Failed to get pollution data:', error);
+        setError('Unable to retrieve pollution data.');
       }
-    }
+    }*/
 
     async function showWeatherForCurrentLocation() {
       try {
@@ -101,17 +132,18 @@ const Weather: React.FC = () => {
 
         const weatherData = await getWeatherData(latitude, longitude);
         setWeatherData(weatherData);
-        setLoading(false);
       } catch (error) {
         console.error('Failed to get weather data:', error);
         setError('Unable to retrieve weather data. Please ensure location services are enabled.');
+      } finally {
         setLoading(false);
       }
     }
 
     showWeatherforForecast();
     showWeatherForCurrentLocation();
-    showPollution();
+    //showPollution();
+    showPollutionPast();
   }, []);
 
   if (loading) return <div>Loading...</div>;
@@ -119,18 +151,6 @@ const Weather: React.FC = () => {
 
   return (
     <main>
-      <div className="upper-hightlight flex justify-between items-center">
-        <div className="upper-hightlight-left flex items-center">
-          <div className="profile-circle"></div>
-          <div className="user-info">
-            <div className="user-name">Hi, Saurav</div>
-            <div className="date">Tues, 03 Sept 2024</div>
-          </div>
-        </div>
-        <div className="upper-hightlight-right mr-4">
-          <div className="languages"></div>
-        </div>
-      </div>
 
       {weatherData && (
         <div className="upper-info flex">
@@ -143,45 +163,58 @@ const Weather: React.FC = () => {
             <div className="data-pressure">Pressure: {weatherData.main.pressure} hPa</div>
             <div className="data-weather">Weather: {weatherData.weather[0].description}</div>
           </div>
-          <div className="map-container"></div>
+          <div className="map-container">
+            {/* Map or other content */}
+            <div className="weather-info-container flex">
+          <div className="weather-box">Temp: {weatherData.main.temp}°C</div>
+          <div className="weather-box">Humidity: {weatherData.main.humidity}%</div>
+          <div className="weather-box">Wind: {weatherData.wind.speed} m/s</div>
+        </div>
+          </div>
         </div>
       )}
 
       <div className="lower-info flex">
-      {weatherForecast && (
-                  <div className="forecast-next">
-                    <h2 className="text-3xl ml-4 mt-2">5-Day Forecast</h2>
-                    <div className="forecast-items ml-4 mt-4">
-                      {weatherForecast.list.slice(0, 4).map((forecast, index) => (
-                        <div key={index} className="forecast-item">
-                          <p>{new Date(forecast.dt * 1000).toLocaleString()}</p>
-                          <p>Temp: {forecast.main.temp}°C</p>
-                          <p>{forecast.weather[0].description}</p>
-                          <img 
-                            src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`} 
-                            alt={forecast.weather[0].description} 
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+        {weatherForecast && (
+          <div className="forecast-next">
+            <h2 className="text-3xl ml-4 mt-2">5-Day Forecast</h2>
+            <div className="forecast-items ml-4 mt-4 flex justify-around">
+              {weatherForecast.list.slice(0, 4).map((forecast, index) => (
+                <div key={index} className="forecast-item">
+                  <p>{new Date(forecast.dt * 1000).toLocaleString()}</p>
+                  <p>Temp: {forecast.main.temp}°C</p>
+                  <p>{forecast.weather[0].description}</p>
+                  <img
+                    src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`}
+                    alt={forecast.weather[0].description}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
-        {pollutionData && (
-                  <div className="pollution">
-                    <h2 className="text-3xl">Pollution Data</h2>
-                    <div className="pollution-details">
-                      <p>Air Quality Index (AQI): {pollutionData.list[0].main.aqi}</p>
-                      <p>CO: {pollutionData.list[0].components.co} µg/m³</p>
-                      <p>NO: {pollutionData.list[0].components.no} µg/m³</p>
-                      <p>NO₂: {pollutionData.list[0].components.no2} µg/m³</p>
-                      <p>O₃: {pollutionData.list[0].components.o3} µg/m³</p>
-                      <p>PM2.5: {pollutionData.list[0].components.pm2_5} µg/m³</p>
-                      <p>PM10: {pollutionData.list[0].components.pm10} µg/m³</p>
-                      <p>NH₃: {pollutionData.list[0].components.nh3} µg/m³</p>
-                    </div>
-                  </div>
-                )}
+        {pastPollution && (
+          <div className="pollution">
+            <h2 className="text-3xl">Past Pollution Data (Last 7 Days)</h2>
+            <div className="pollution-details flex justify-evenly">
+              {/* Customize the display as needed */}
+              {pastPollution.list.slice(0,3).map((data, index) => (
+                <div key={index} className="pollution-item">
+                  <p>Date: {new Date(data.dt * 1000).toLocaleDateString()}</p>
+                  <p>AQI: {data.main.aqi}</p>
+                  <p>CO: {data.components.co} µg/m³</p>
+                  <p>NO: {data.components.no} µg/m³</p>
+                  <p>NO₂: {data.components.no2} µg/m³</p>
+                  <p>O₃: {data.components.o3} µg/m³</p>
+                  <p>PM2.5: {data.components.pm2_5} µg/m³</p>
+                  <p>PM10: {data.components.pm10} µg/m³</p>
+                  <p>NH₃: {data.components.nh3} µg/m³</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
