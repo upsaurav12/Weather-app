@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { WeatherData, ForecastData, Pollution } from "./type"; // Ensure you import ForecastData
 import './weather.css';
+//import { ClipLoader } from "react-spinners";
 
 const Weather: React.FC = () => {
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
@@ -48,6 +49,10 @@ const Weather: React.FC = () => {
         throw new Error(`Error fetching weather data: ${response.statusText}`);
       }
 
+      console.log('Rate Limit Limit:', response.headers.get('X-RateLimit-Limit'));
+    console.log('Rate Limit Remaining:', response.headers.get('X-RateLimit-Remaining'));
+    console.log('Rate Limit Reset:', response.headers.get('X-RateLimit-Reset'));
+
       return response.json();
     }
 
@@ -59,6 +64,10 @@ const Weather: React.FC = () => {
       if (!response.ok) {
         throw new Error(`Error fetching weather forecast data: ${response.statusText}`);
       }
+
+      console.log('Rate Limit Limit:', response.headers.get('X-RateLimit-Limit'));
+    console.log('Rate Limit Remaining:', response.headers.get('X-RateLimit-Remaining'));
+    console.log('Rate Limit Reset:', response.headers.get('X-RateLimit-Reset'));
 
       return response.json();
     }
@@ -103,6 +112,7 @@ const Weather: React.FC = () => {
         const { latitude, longitude } = position.coords;
 
         const weatherForecast = await getWeatherForecast(latitude, longitude);
+
         setWeatherForecast(weatherForecast);
       } catch (error) {
         console.error('Failed to get forecast data:', error);
