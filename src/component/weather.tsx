@@ -153,7 +153,7 @@ const Weather: React.FC = () => {
     <main>
 
       {weatherData && (
-        <div className="upper-info flex">
+        <div className="upper-info">
           <div className="about-weather">
             <div className="profile-circle-2"></div>
             <h3 className="text-3xl">{weatherData.name}</h3>
@@ -174,7 +174,7 @@ const Weather: React.FC = () => {
         </div>
       )}
 
-      <div className="lower-info flex">
+      <div className="lower-info">
         {weatherForecast && (
           <div className="forecast-next">
             <h2 className="text-3xl ml-4 mt-2">5-Day Forecast</h2>

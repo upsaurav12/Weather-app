@@ -2,6 +2,7 @@ main {
   margin: 25px 0;
   width: 100%;
   border-radius: 10px;
+  border: 1px solid ;
 }
 
 .upper-info {
@@ -100,3 +101,110 @@ main {
   margin: 0 5px;
 }
 
+
+@media screen and (max-width: 400px) {
+  main{
+    height: 100%;
+
+  }
+  .map-container {
+    width: 70%;
+  }
+
+  .upper-info {
+    display: block;
+  }
+
+  .lower-info{
+    display: block;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  main {
+    margin: 25px 0;
+    width: 100%;
+    border-radius: 10px; /* For debugging, remove if not needed */
+  }
+
+  .upper-info {
+    display: block; /* Stack children vertically */
+    width: 100%; /* Full width */
+    margin-bottom: 20px; /* Space between upper-info and lower-info */
+  }
+
+  .about-weather { 
+    border: 1px solid;
+    width: 100%; /* Full width */
+    height: 100%; /* Adjust height to fit content */
+    border-radius: 10px;
+    margin: 0 0 10px 0; /* Space below */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .map-container {
+    width: 100%; /* Full width */
+    height: 100%; /* Adjust height to fit content */
+    border-radius: 10px;
+    border: 1px solid;
+    margin: 0 0 10px 0; /* Space below */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    padding: 10px;
+  }
+  
+  .lower-info {
+    position: relative;
+    top: 350px;
+  }
+
+  .weather-info-container {
+    display: block; /* Stack weather boxes vertically */
+    width: 100%; /* Full width */
+    margin: 0 auto; /* Center horizontally */
+    padding: 10px;
+  }
+
+  .weather-box {
+    width: 70px; /* Fixed width for small screens */
+    height: 150px; /* Fixed height */
+    border: 1px solid;
+    border-radius: 8px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    padding: 10px;
+    margin: 5px 0; /* Vertical spacing between boxes */
+  }
+
+  .forecast-next {
+    width: 100%; /* Full width */
+    height: 350px; /* Adjust height to fit content */
+    border: 1px solid;
+    border-radius: 10px;
+    margin: 0 0 10px 0; /* Space below */
+    padding: 10px;
+  }
+
+  .pollution {
+    width: 100%; /* Full width */
+    height: auto; /* Adjust height to fit content */
+    border: 1px solid;
+    border-radius: 10px;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .lower-info {
+    display: block; /* Stack children vertically */
+    width: 100%; /* Full width */
+  }
+}
