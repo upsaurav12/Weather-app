@@ -12,19 +12,20 @@ export const Weather: React.FC = () => {
     const [Loading, setLoading] = useState<boolean>(false);
 
     const forecastArray = forecastData?.list.slice(0,10).map((i)=> (new Date(i.dt * 1000).getHours()))
-    const forecastTemp = forecastData?.list.slice(0,10).map((i) => i.main.temp)
-    const forecastHumidity = forecastData?.list.slice(0,10).map((i) => i.main.humidity)
+    const labels = forecastArray?.map(item => item.toString()) || [];
+    //const forecastTemp = forecastData?.list.slice(0,10).map((i) => i.main.temp)
+    const forecastHumidity = forecastData?.list.slice(0,10).map((i) => i.main.humidity) || []
     /*
     const [analysis,  setAnalysis] = useState(['Temperature' , 'Humidity']);
     const [graphState ,setGraphState] = useState([forecastHumidity , forecastTemp])*/
 
 
     const data = {
-        labels: forecastArray || [],
+        labels: labels,
         datasets: [
           {
-            label: ['Humidity'],
-            data: forecastHumidity|| [],
+            label: 'Humidity',
+            data: forecastHumidity,
             borderColor: 'rgb(75, 192, 192)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
           },
