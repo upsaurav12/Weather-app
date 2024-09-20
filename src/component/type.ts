@@ -45,7 +45,13 @@ export interface WeatherData {
     list: {
       dt: number;
       main: {
+        humidity: number;
+        pressure: number;
         temp: number;
+      };
+      visibility: number;
+      wind: {
+        speed: number;
       };
       weather: {
         description: string;

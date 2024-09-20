@@ -27,6 +27,8 @@ const Weather: React.FC = () => {
         }
       });
     }
+
+
 /*
     async function getPollution(lat: number, lon: number): Promise<Pollution> {
       const response = await fetch(

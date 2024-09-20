@@ -1,10 +1,10 @@
-import Weather from "./component/weather"
-import Nav from "./component/Nav"
+import { Weather } from "./pages/Weather";
+import './App.css'
+//import User from './pages/User'
 function App() {
 
   return (
-    <div className="main-container flex">
-        <Nav/>
+    <div className="App">
         <Weather/>
     </div>
   )
