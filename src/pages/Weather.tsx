@@ -165,7 +165,7 @@ export const Weather: React.FC = () => {
     return (
         <main className="w-11/12 m-auto min-h-screen">
             <div className="upper-info min-h-[50vh] mt-5 m-auto flex xs:flex-col xs:items-center xs:w-full ">
-                    <div className="weather-overview border h-full w-[400px] rounded-[1rem] min-h-[402px] xs:w-11/12 xs:h-[70vh] xs:rounded">
+                    <div className="weather-overview border h-full w-[400px] rounded-[1rem] min-h-[402px] xs:w-11/12 xs:h-[65vh] xs:rounded xs:border-hidden">
                         {weatherData && (
                             <div>
                             <div className="temperature w-full h-[210px] rounded-[1rem] flex 1xl:flex-col 1xl:items-center xs:mt-20  xxs:flex-col">
@@ -201,7 +201,7 @@ export const Weather: React.FC = () => {
                         </div>
                         )}
                 </div>
-                <div className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-11/12 xs:mt-16 xs:rounded xs:h-[40vh] 1xl:w-8/12">
+                <div className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-11/12  xs:rounded xs:h-[40vh] 1xl:w-8/12 xs:border-hidden">
                 <div className="h-[300px]  w-11/12 m-[40px] mt-[60px] xs:mx-1">
                     {/*}
                     {analysis.map((v , i) => 
@@ -254,7 +254,7 @@ export const Weather: React.FC = () => {
                 </div>
             </div>
             <div className="lower-info min-h-[50vh] mt-1 flex xs:flex-col mt-10">
-                <div className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:ml-4 xs:rounded xs:w-[92%]">
+                <div className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:ml-4 xs:rounded xs:w-[92%] xs:border-hidden">
                     <div className="forecast-title">
                         <h1 className="text-2xl font-bold ml-5 mt-4">Forecast(Next 3-hours) </h1>
 
