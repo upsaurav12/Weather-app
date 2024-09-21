@@ -7,7 +7,11 @@ export default {
   theme: {
   	extend: {
 		screens: {
-			'xs' : {'min': '350px' , 'max' : '550px'},
+			'xxs': {'min': '300px' , 'max': '497px'},
+			'xs' : {'min': '350px' , 'max' : '670px'},
+			'1xl' : {'min': '671px' , 'max': '1480px'},
+			'lgs' :{'min': '670px', 'max': '1111px'},
+			'lgss': {'min': '300px', 'max':'940px'},
 		},
   		borderRadius: {
   			lg: 'var(--radius)',

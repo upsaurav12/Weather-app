@@ -73,9 +73,23 @@ export const Weather: React.FC = () => {
         async function getUserLocation(): Promise<GeolocationPosition> {
             return new Promise((resolve, reject) => {
               if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(resolve, reject, {
-                  enableHighAccuracy: true,
-                  timeout: 10000,
+                navigator.geolocation.getCurrentPosition(resolve, (error) => {
+                  switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                      reject(new Error("User denied the request for Geolocation."));
+                      break;
+                    case error.POSITION_UNAVAILABLE:
+                      reject(new Error("Location information is unavailable."));
+                      break;
+                    case error.TIMEOUT:
+                      reject(new Error("The request to get user location timed out."));
+                      break;
+                    default:
+                      reject(new Error("An unknown error occurred."));
+                  }
+                }, {
+                  enableHighAccuracy: false,
+                  timeout: 30000,  // Increased timeout
                   maximumAge: 0,
                 });
               } else {
@@ -83,6 +97,7 @@ export const Weather: React.FC = () => {
               }
             });
           }
+          
 
         async function fetchWeather(lat: number , lon: number): Promise<WeatherData> {
             const response = await fetch(
@@ -148,36 +163,36 @@ export const Weather: React.FC = () => {
     if (Loading) return <div>Loading.....</div>
     if (error) return <div>Error: {error}</div>
     return (
-        <main className="w-11/12 m-auto h-screen ">
-            <div className="upper-info h-[48%] mt-5 m-auto flex">
-                    <div className="weather-overview h-full border w-[400px] rounded-[1rem] ">
+        <main className="w-11/12 m-auto min-h-screen">
+            <div className="upper-info min-h-[50vh] mt-5 m-auto flex xs:flex-col xs:items-center xs:w-full ">
+                    <div className="weather-overview border h-full w-[400px] rounded-[1rem] min-h-[402px] xs:w-11/12 xs:h-[70vh] xs:rounded">
                         {weatherData && (
                             <div>
-                            <div className="temperature w-full h-[210px] rounded-[1rem] flex ">
-                                <div className="weather-image w-[190px] h-[190px] m-2 rounded-[1rem] flex justify-center items-center">
-                                    <img src={cloud} className='ml-4' alt="" />
+                            <div className="temperature w-full h-[210px] rounded-[1rem] flex 1xl:flex-col 1xl:items-center xs:mt-20  xxs:flex-col">
+                                <div className="weather-image w-[190px] h-[190px] m-2 rounded-[1rem] flex justify-center items-center xs:ml-16">
+                                    <img src={cloud} className='ml-4 1xl:h-[160px] 1xl:w-[160px]' alt="" />
                                 </div>
                                 <div className="weather-temp w-[190px] h-[190px]  m-2 mr-3  rounded-[1rem] flex justify-center items-center">
-                                    <h2 className="text-7xl font-medium">{weatherData.main.temp.toFixed(0)}°C</h2>
+                                    <h2 className="text-7xl font-medium 1xl:text-5xl xs:ml-24">{weatherData.main.temp.toFixed(0)}°C</h2>
                                 </div>
                             </div>
-                            <div className="weather-name border-b w-8/12 h-12 ml-6 flex items-end">
-                                <div className="flex items-center">
-                                    <TiWeatherCloudy/>
-                                    <h1 className="text-xl font-medium ml-2">{((weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1)))}</h1>
+                            <div className="weather-name border-b w-8/12 h-12 ml-6 flex items-end md:mt-3 xxs:mt-10 xxs:ml-20 xxs:border-none ">
+                                <div className="flex items-center md:mt-4 ">
+                                    <TiWeatherCloudy className="xs:hidden"/>
+                                    <h1 className="text-xl font-medium ml-2 lg:text-base lg:text-nowrap lgs:text-base xs:text-4xl xs:ml-12">{((weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1)))}</h1>
                                 </div>
                             </div>
                             <div className="date-time w-11/12 h-12 mt-8 m-auto">
                                 <div className="location ml-2">
                                     <div className="flex items-center justify-start">
                                     <CiLocationOn/>
-                                    <h1 className="font-medium ml-2 text-lg">{weatherData.name}, {weatherData.sys.country}</h1>
+                                    <h1 className="font-medium ml-2 text-lg lg:text-sm lgs:text-sm">{weatherData.name}, {weatherData.sys.country}</h1>
                                     </div>
                                 </div>
                                 <div className="time ml-2">
                                     <div className="flex items-center">
                                         <CiCalendarDate/>
-                                        <h1 className="text-lg font-medium ml-2">
+                                        <h1 className="text-lg font-medium ml-2 lg:text-sm lgs:text-sm">
                                     {(new Date(weatherData.dt * 1000).getDate())} {Month[(new Date(weatherData.dt * 1000).getMonth())]} {(new Date(weatherData.dt * 1000).getFullYear())},{(new Date(weatherData.dt * 1000).getHours())}:{(new Date(weatherData.dt * 1000).getMinutes())}
                                     </h1>
                                     </div>
@@ -186,10 +201,10 @@ export const Weather: React.FC = () => {
                         </div>
                         )}
                 </div>
-                <div className="weather-info w-[1060px] border h-full ml-1 rounded-[1rem]">
-                <div  style={{ height: '300px', width: '90%', margin: '40px', marginTop: '60px' }}>
+                <div className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-11/12 xs:mt-16 xs:rounded xs:h-[40vh] 1xl:w-8/12">
+                <div className="h-[300px]  w-11/12 m-[40px] mt-[60px] xs:mx-1">
                     {/*}
-                    {analysis.map((v , i) => (
+                    {analysis.map((v , i) => 
                         <div key={i} onClick={() => {console.log(setAnalysis(i))}}>
                             {v} 
                         </div>
@@ -238,8 +253,8 @@ export const Weather: React.FC = () => {
                     */}
                 </div>
             </div>
-            <div className="lower-info h-[48%] mt-1 flex">
-                <div className="weather-forecast h-full w-[520px] border rounded-[1rem]">
+            <div className="lower-info min-h-[50vh] mt-1 flex xs:flex-col mt-10">
+                <div className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:ml-4 xs:rounded xs:w-[92%]">
                     <div className="forecast-title">
                         <h1 className="text-2xl font-bold ml-5 mt-4">Forecast(Next 3-hours) </h1>
 
@@ -291,7 +306,7 @@ export const Weather: React.FC = () => {
                             )}
                         </ul>
                 </div>
-                <div className="weather-analysis w-9/12 h-full border ml-1 rounded-[1rem]"></div>
+                <div className="weather-analysis h-11/12 w-9/12 border ml-1 rounded-[1rem] xs:hidden"></div>
             </div>
         </main>
     )
