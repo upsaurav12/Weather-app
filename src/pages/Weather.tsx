@@ -26,7 +26,7 @@ export const Weather: React.FC = () => {
           {
             label: 'Humidity',
             data: forecastHumidity,
-            borderColor: 'rgb(75, 192, 192)',
+            borderColor: 'rgb(208,212,216)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
           },
         ],
@@ -68,6 +68,7 @@ export const Weather: React.FC = () => {
     const Month = ['Jan' , 'Feb', 'Mar' , 'Apr', 'May' , 'June' , 'July' , 'Aug' , 'Sept' , 'Oct' , 'Nov' , 'Dec']
     const apiKey = import.meta.env.VITE_API_TOKEN;
         console.log(apiKey)
+
     useEffect(() => {
         //const apiKey = '2b02841851fadfe717b1834b2074c944'
         async function getUserLocation(): Promise<GeolocationPosition> {
@@ -201,7 +202,7 @@ export const Weather: React.FC = () => {
                         </div>
                         )}
                 </div>
-                <div className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-full  xs:rounded xs:h-[25vh] 1xl:w-8/12 xs:border xs:w-[95vw] xs:mr-1 xs:mt-9 xs:rounded-[0.75rem]">
+                <div className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-full  xs:rounded xs:h-[25vh] 1xl:w-8/12 xs:border-hidden xs:w-[95vw] xs:mr-1 xs:mt-9 xs:rounded-[0.75rem]">
                 <div className="h-[300px]  w-11/12 m-[40px] mt-[60px] xs:mx-1 xs:border-hidden xs:mr-8 xs:my-8 xs:h-[150px] xs:ml-4 xs:mt-12">
                     {/*}
                     {analysis.map((v , i) => 
@@ -254,9 +255,9 @@ export const Weather: React.FC = () => {
                 </div>
             </div>
             <div className="lower-info min-h-[50vh] mt-1 flex xs:flex-col mt-10  xs:mr-1 xs:text-slate-50">
-                <div className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:ml-0  xs:rounded-[0.75rem]  xs:border xs:ml-[-5px]">
+                <div className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:ml-0  xs:rounded-[0.75rem]  xs:border-hidden xs:ml-[-5px]">
                     <div className="forecast-title">
-                        <h1 className="text-2xl font-bold ml-5 mt-4">Forecast(Next 3-hours) </h1>
+                        <h1 className="text-2xl font-bold ml-4 mt-4">Forecast(Next 3-hours) </h1>
 
                     </div>
 
@@ -297,8 +298,8 @@ export const Weather: React.FC = () => {
                                         <img src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`}
                                             alt={forecast.weather[0].description} className="ml-2"
                                         />
-                                        <p className="mr-4 font-medium">{forecast.main.temp.toFixed(0)}°C</p>
-                                        <h3 className="mr-3 font-medium">{new Date(forecast.dt * 1000).getDate()} {Month[new Date(forecast.dt * 1000).getMonth()]}</h3>
+                                        <p className="mr-3 font-medium">{forecast.main.temp.toFixed(0)}°C</p>
+                                        <h3 className="mr-1 font-medium xs:mr-[20px]">{new Date(forecast.dt * 1000).getDate()} {Month[new Date(forecast.dt * 1000).getMonth()]}</h3>
                                         {/*<p className="mr-4">{forecast.main.temp.toFixed(0)}°C</p>*/}
                                     </div>
                                 ))

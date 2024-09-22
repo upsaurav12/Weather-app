@@ -1,0 +1,9 @@
+@media (max-width: 650px) {
+    .weather-info{
+        background-color: #709bd0;
+    }
+
+    .weather-forecast{
+        background-color: #709bd0;
+    }
+}
