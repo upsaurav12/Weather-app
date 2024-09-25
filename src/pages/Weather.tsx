@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { ForecastData , WeatherData} from "../component/type"; // Ensure you import ForecastData
+import React, { useEffect, useState, useCallback } from "react";
+import { ForecastData , WeatherData, CachedData} from "../component/type"; // Ensure you import ForecastData
 import './Weather.css';
 import cloud from '../assets/Vector.svg'
 import { CiLocationOn , CiCalendarDate  } from "react-icons/ci";
 import { TiWeatherCloudy } from "react-icons/ti";
 import LineChart from "./Chart";
+//import { get } from "http";
 export const Weather: React.FC = () => {
     const [forecastData , setForcastData] = useState<ForecastData | null>(null);
     const [error , setError] = useState<string| null> (null);
     const [weatherData , setWeatherData] = useState<WeatherData | null> (null);
     const [Loading, setLoading] = useState<boolean>(false);
-
+    const [location, setLocation] = useState<{ lat: number, lon: number } | null>(null); // Store user location
     const forecastArray = forecastData?.list.slice(0,11).map((i)=> (new Date(i.dt * 1000).getHours()))
     const labels = forecastArray?.map(item => item.toString()) || [];
     //const forecastTemp = forecastData?.list.slice(0,10).map((i) => i.main.temp)
@@ -67,38 +68,25 @@ export const Weather: React.FC = () => {
 
     const Month = ['Jan' , 'Feb', 'Mar' , 'Apr', 'May' , 'June' , 'July' , 'Aug' , 'Sept' , 'Oct' , 'Nov' , 'Dec']
     const apiKey = import.meta.env.VITE_API_TOKEN;
-        console.log(apiKey)
-
-    useEffect(() => {
-        //const apiKey = '2b02841851fadfe717b1834b2074c944'
-        async function getUserLocation(): Promise<GeolocationPosition> {
-            return new Promise((resolve, reject) => {
-              if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(resolve, (error) => {
-                  switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                      reject(new Error("User denied the request for Geolocation."));
-                      break;
-                    case error.POSITION_UNAVAILABLE:
-                      reject(new Error("Location information is unavailable."));
-                      break;
-                    case error.TIMEOUT:
-                      reject(new Error("The request to get user location timed out."));
-                      break;
-                    default:
-                      reject(new Error("An unknown error occurred."));
-                  }
-                }, {
-                  enableHighAccuracy: false,
-                  timeout: 30000,  // Increased timeout
-                  maximumAge: 0,
-                });
-              } else {
-                reject(new Error("Geolocation is not supported by this browser."));
-              }
-            });
-          }
+        //console.log(apiKey);
           
+        const getUserLocation = async () => {
+            try {
+                const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(resolve, reject);
+                    } else {
+                        reject(new Error("Geolocation is not supported by this browser."));
+                    }
+                });
+                const { latitude, longitude } = position.coords;
+                setLocation({ lat: roundCoordinate(latitude), lon: roundCoordinate(longitude) }); // Save location in state
+            } catch (error) {
+                console.error("Error getting location:", error);
+                setError("Unable to retrieve location.");
+            }
+        };
+    
 
         async function fetchWeather(lat: number , lon: number): Promise<WeatherData> {
             const response = await fetch(
@@ -112,6 +100,35 @@ export const Weather: React.FC = () => {
             return response.json()
         }
 
+        const CACHE_EXPIRATION_TIME = 1000 * 60 * 10; // 5 minutes
+
+        
+
+        // Function to save data to localStorage with a timestamp
+        function saveToLocalStorage<T>(key: string, data: T): void {
+            const cachedData: CachedData<T> = {
+                data,
+                timestamp: Date.now(), // Save the current timestamp
+            };
+            localStorage.setItem(key, JSON.stringify(cachedData));
+        }
+
+        // Function to get data from localStorage
+        function getFromLocalStorage<T>(key: string): T | null {
+            const cachedData = localStorage.getItem(key);
+            if (cachedData) {
+                const { data, timestamp }: CachedData<T> = JSON.parse(cachedData);
+                // Check if the cached data is still valid
+                if (Date.now() - timestamp < CACHE_EXPIRATION_TIME) {
+                    return data; // Return cached data if valid
+                } else {
+                    localStorage.removeItem(key); // Remove stale data
+                }
+            }
+            return null; // No valid cached data
+        }
+
+
         async function fetchForecast(lat: number , lon: number): Promise<ForecastData> {
             const response = await fetch(
                 `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`
@@ -124,41 +141,83 @@ export const Weather: React.FC = () => {
             return response.json();
         }
 
-        async function DisplayWeather () {
-            try {
-                const position = await getUserLocation();
-                const {latitude , longitude} = position.coords;
-
-                const WeatherData = await fetchWeather(latitude , longitude);
-
-                setWeatherData(WeatherData);
-            }catch(error) {
-                console.error('Got Some error while Fetching' , error)
-                setError('Error while Fetching')
-            } finally {
-                setLoading(false)
-            }
+        function roundCoordinate(coord: number, precision: number = 2): number {
+            return parseFloat(coord.toFixed(precision));
         }
 
-        async function DisplayForecast() {
+        
+        const DisplayWeatherAndForecast = useCallback(async () => {
+            console.log('Fetching weather and forecast data call back...'); // Log when fetching starts
+            if ( !location) return;
+            setLoading(true);
+
             try {
-                const position = await getUserLocation();
-                const {latitude , longitude} = position.coords;
+                let { lat, lon } = location;
 
-                const ForecastData = await fetchForecast(latitude , longitude)
+                lat = roundCoordinate(lat);
+                lon = roundCoordinate(lon)
 
-                setForcastData(ForecastData);
-            } catch (errored) {
-                console.error(errored)
-                setError('Error getting Forecast')
+                const weatherCacheKey = `weather_${lat},${lon}`;
+                const forecastCacheKey = `forecast_${lat},${lon}`;
+                console.log("weather and forecast cached key ", weatherCacheKey , forecastCacheKey);
+
+                const cachedWeatherData = getFromLocalStorage<WeatherData>(weatherCacheKey);
+                const cachedForecastData = getFromLocalStorage<ForecastData>(forecastCacheKey);
+
+
+
+                if (cachedForecastData && cachedWeatherData) {
+                    console.log('Serving from cache....');
+                    setWeatherData(cachedWeatherData );
+                    setForcastData(cachedForecastData );
+                    return ;
+                }
+
+                const [newweatherData, newforecastData] = await Promise.all([
+                    fetchWeather(lat, lon),
+                    fetchForecast(lat, lon)
+                ]);
+            
+
+                console.log('Requesting to API ')
+
+                if (JSON.stringify(newweatherData) !== JSON.stringify(weatherData)){
+                    setWeatherData(newweatherData)
+                    console.log("Weather Data updated")
+                }
+                setWeatherData(weatherData);
+                if(JSON.stringify(newforecastData) !== JSON.stringify(forecastData)){
+                    setForcastData(newforecastData)
+                    console.log("Forecast Data Updated")
+                }
+                //console.log('Weather Data Fetched and Cached:', weatherData);
+
+                console.log("Saved to local storage") 
+
+                saveToLocalStorage<WeatherData>(weatherCacheKey, newweatherData);
+                saveToLocalStorage<ForecastData>(forecastCacheKey, newforecastData);
+        
+            } catch (error) {
+                console.error('Error while retrieving weather data:', error);
+                setError('Error while fetching the data');
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
+        }, [location])
 
+        useEffect(() => {
+            getUserLocation()
+        },[])
 
-        DisplayWeather();
-        DisplayForecast();
+        useEffect(() => {
+            if (location) {
+                DisplayWeatherAndForecast();
+            }
+        }, [location , DisplayWeatherAndForecast])
+
+    useEffect(() => {
+        console.log("Hello useEffect")
+        DisplayWeatherAndForecast()
     }, [])
 
     if (Loading) return <div>Loading.....</div>
@@ -204,58 +263,12 @@ export const Weather: React.FC = () => {
                 </div>
                 <div className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-full  xs:rounded xs:h-[25vh] 1xl:w-8/12 xs:border-hidden xs:w-[95vw] xs:mr-1 xs:mt-9 xs:rounded-[0.75rem]">
                 <div className="h-[300px]  w-11/12 m-[40px] mt-[60px] xs:mx-1 xs:border-hidden xs:mr-8 xs:my-8 xs:h-[150px] xs:ml-4 xs:mt-12">
-                    {/*}
-                    {analysis.map((v , i) => 
-                        <div key={i} onClick={() => {console.log(setAnalysis(i))}}>
-                            {v} 
-                        </div>
-                    ))}*/}
                     <LineChart data={data} options={options} />
                 </div>
-                    {/*}
-                    <div className="upper-weather-info">
-                        <ul>
-                            <li>
-                                <div className=".info-title"></div>
-                                <div className="info-image"></div>
-                                <div className="info-value"></div>
-                            </li>
-                            <li>
-                                <div className=".info-title"></div>
-                                <div className="info-image"></div>
-                                <div className="info-value"></div>
-                            </li>
-                            <li>
-                                <div className=".info-title"></div>
-                                <div className="info-image"></div>
-                                <div className="info-value"></div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div className="lower-weather-info">
-                    <ul>
-                            <li>
-                                <div className=".info-title-l"></div>
-                                <div className="info-image-l"></div>
-                                <div className="info-value-l"></div>
-                            </li>
-                            <li>
-                                <div className=".info-title-l"></div>
-                                <div className="info-image-l"></div>
-                                <div className="info-value-l"></div>
-                            </li>
-                            <li>
-                                <div className=".info-title-l"></div>
-                                <div className="info-image-l"></div>
-                                <div className="info-value-l"></div>
-                            </li>
-                        </ul>
-                    </div>
-                    */}
                 </div>
             </div>
             <div className="lower-info min-h-[50vh] mt-1 flex xs:flex-col mt-10  xs:mr-1 xs:text-slate-50">
-                <div className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:ml-0  xs:rounded-[0.75rem]  xs:border-hidden xs:ml-[-5px]">
+                <div className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[93vw] xs:ml-0  xs:rounded-[0.75rem]  xs:border-hidden xs:ml-[-3px]">
                     <div className="forecast-title">
                         <h1 className="text-2xl font-bold ml-4 mt-4">Forecast(Next 3-hours) </h1>
 
@@ -265,33 +278,6 @@ export const Weather: React.FC = () => {
                         <div className="weather-analysis">
 
                         </div>
-                            {/*<li>
-                                <div className="forecast-weather-image"></div>
-                                <div className="date">15 Sept</div>
-                                <div className="day">Sunday</div>
-                            </li>
-                            <li>
-                                <div className="forecast-weather-image"></div>
-                                <div className="date">16 Sept</div>
-                                <div className="day">Monday</div>
-                            </li>
-                            <li>
-                                <div className="forecast-weather-image"></div>
-                                <div className="date">17Sept</div>
-                                <div className="day">Tuesday</div>
-                            </li>
-                            <li>
-                                <div className="forecast-weather-image"></div>
-                                <div className="date">18 Sept</div>
-                                <div className="day">Webnesday</div>
-                            </li>
-                            <li>
-                                <div className="forecast-weather-image"></div>
-                                <div className="date">19Sept</div>
-                                <div className="day">Thursday</div>
-                            </li>
-                            */}
-
                             {forecastData && (
                                 forecastData.list.slice(0,6).map((forecast , idx) => (
                                     <div key={idx} className="flex justify-between items-center">
