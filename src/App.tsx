@@ -1,10 +1,10 @@
-import { Weather } from "./pages/Weather";
+import { Weather   } from "./pages/Weather";
 import './App.css'
 //import User from './pages/User'
-function App() {
+const  App = () => {
 
   return (
-    <div className="App">
+    <div className="App" style={{backgroundColor: '#D9CBA0'}}>
         <Weather/>
     </div>
   )

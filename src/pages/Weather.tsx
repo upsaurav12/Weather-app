@@ -1,9 +1,19 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { ForecastData , WeatherData, CachedData} from "../component/type"; // Ensure you import ForecastData
 import './Weather.css';
-import cloud from '../assets/Vector.svg'
+import cloud from '../assets/Vector.svg';
+import icon from '../assets/react.svg';
+import haze from '../assets/Haze.svg';
+import night_cloud from '../assets/Night-cloud.svg';
+import night from '../assets/Night.svg';
+import night_haze from '../assets/night-haze.svg'
+import sunny from '../assets/Sunny.svg';
 import { CiLocationOn , CiCalendarDate  } from "react-icons/ci";
 import { TiWeatherCloudy } from "react-icons/ti";
+import Wind from '../assets/Wind1.svg';
+import Thermometer from '../assets/thermometer.svg';
+import Humidity from '../assets/Humidity.svg';
+import UV from '../assets/UV.svg'
 import LineChart from "./Chart";
 //import { get } from "http";
 export const Weather: React.FC = () => {
@@ -20,6 +30,136 @@ export const Weather: React.FC = () => {
     const [analysis,  setAnalysis] = useState(['Temperature' , 'Humidity']);
     const [graphState ,setGraphState] = useState([forecastHumidity , forecastTemp])*/
 
+
+    interface weatherImage {
+        icon_image: string,
+        icon_name:string,
+    }
+
+    interface weatherTheme {
+        weather_name: string,
+        weather_color:string,
+        colors:{
+            text_color: string,
+        child_element_color:string
+        }
+    }
+
+    interface extraWeather {
+        extra_name: string,
+        extra_icon: string,
+        extra_val?: number | undefined | string,
+    }
+
+    const convertUnixToTime = (unixTimestamp: number | undefined): string => {
+        if (!unixTimestamp) return "N/A"; // Handle case where timestamp is undefined
+        const date = new Date(unixTimestamp * 1000); // Convert to milliseconds
+        const hours = date.getHours().toString().padStart(2, '0'); // Get hours and pad with zero
+        const minutes = date.getMinutes().toString().padStart(2, '0'); // Get minutes and pad with zero
+        return `${hours}:${minutes}`; // Format as HH:MM
+    };
+
+
+    const extra_weather:extraWeather[] = [
+        {extra_name: "Sunrise" , extra_icon: Wind , extra_val: convertUnixToTime(weatherData?.sys?.sunrise)},
+        {extra_name: "Humidity", extra_icon: Humidity , extra_val:  weatherData?.main.humidity},
+        {extra_name: "UV Index", extra_icon: UV , extra_val: weatherData?.main.pressure},
+        {extra_name: "Feels Like", extra_icon: Thermometer , extra_val: weatherData?.main.feels_like}
+    ]
+
+    
+    const weather_image:weatherImage[] = [
+        {icon_image: cloud , icon_name: "Cloud"},
+        {icon_image: icon , icon_name: "React"},
+        {icon_image: sunny , icon_name: "01d"},
+        {icon_image: night , icon_name: "01n"},
+        {icon_image: night_cloud , icon_name:"02n"},
+        {icon_image: night_haze , icon_name: "50n"},
+        {icon_image: haze , icon_name: "50d"}
+    ]
+
+    const changeTheme = (key : string):string => {
+        //const currentWeather = weatherData?.weather[0].icon
+        const theme_color = weather_theme.find((i) => i.weather_name === key )
+        return theme_color ? theme_color.weather_color: "blue";
+    }
+
+    const changeTextColor = (key: string):string => {
+        const theme = weather_theme.find((i) => i.weather_name === key);
+        return theme ? theme.colors.text_color : "white"; // Default fallback color
+    };
+    
+    const changeChildElementColor = (key: string):string => {
+        const theme = weather_theme.find((i) => i.weather_name === key);
+        return theme ? theme.colors.child_element_color : "gray"; // Default fallback color
+    };
+
+
+
+
+    const weather_theme: weatherTheme[] = [
+        { 
+            weather_name: "50n", 
+            weather_color: "#2C3E50", 
+            colors: {
+                text_color: "#FFFFFF", 
+                child_element_color: "#BDC3C7"
+            }
+        },
+        { 
+            weather_name: "50d", 
+            weather_color: "#D9CBA0", 
+            colors: {
+                text_color: "#34495E", 
+                child_element_color: "#8B4513"
+            }
+        },
+        { 
+            weather_name: "01d", 
+            weather_color: "#87CEEB", 
+            colors: {
+                text_color: "#000000", 
+                child_element_color: "#005B99"
+            }
+        },
+        { 
+            weather_name: "01n", 
+            weather_color: "#34495E", 
+            colors: {
+                text_color: "#FFFFFF", 
+                child_element_color: "#BDC3C7"
+            }
+        },
+        { 
+            weather_name: "03d", 
+            weather_color: "#D3D3D3", 
+            colors: {
+                text_color: "#2C3E50", 
+                child_element_color: "#7F8C8D"
+            }
+        },
+        { 
+            weather_name: "03n", 
+            weather_color: "#B0BEC5", 
+            colors: {
+                text_color: "#000000", 
+                child_element_color: "#37474F"
+            }
+        }
+    ];
+
+    const weatherKey = weatherData?.weather[0]?.icon || "50n"; // Fallback to "50n"
+    
+    const backgroundColor = changeTheme(weatherKey);
+    const textColor = changeTextColor(weatherKey);
+    const childElementColor = changeChildElementColor(weatherKey);
+
+    const changeIcon = (key: string) => {
+        const default_icon = cloud;
+       const data = weather_image.find((i) => i.icon_name === key)
+       console.log(key)
+       return data ? data.icon_image : default_icon
+    }
 
     const data = {
         labels: labels,
@@ -223,52 +363,67 @@ export const Weather: React.FC = () => {
     if (Loading) return <div>Loading.....</div>
     if (error) return <div>Error: {error}</div>
     return (
-        <main className="w-11/12 m-auto min-h-screen">
-            <div className="upper-info min-h-[50vh] mt-5 m-auto flex xs:flex-col xs:items-center xs:w-full ">
-                    <div className="weather-overview border h-full w-[400px] rounded-[1rem] min-h-[260px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
-                        {weatherData && (
-                            <div>
-                            <div className="temperature w-full h-[150px] rounded-[1rem] flex 1xl:flex-col 1xl:items-center xs:flex-row-reverse">
-                                <div className="weather-image w-[190px] h-[190px] m-2 rounded-[1rem] flex justify-center items-center">
-                                    <img src={cloud} className='ml-4 1xl:h-[160px] 1xl:w-[160px] xs:w-[100px] xs:h-[100px] xs:mt-1' alt="" />
-                                </div>
-                                <div className="weather-temp w-[190px] h-[190px]  m-2 mr-3  rounded-[1rem] flex justify-center items-center xs:ml-0 xs:mr-20">
-                                    <h2 className="text-7xl font-base 1xl:text-5xl xs:ml-0">{weatherData.main.temp.toFixed(0)}°</h2>
-                                </div>
-                            </div>
-                            <div className="weather-name border-b w-8/12 h-12 ml-6 flex items-end md:mt-3 xs:border-none xs:ml-2">
-                                <div className="flex items-center md:mt-4 xxs:mb-2">
-                                    <TiWeatherCloudy className="xs:hidden"/>
-                                    <h1 className="text-xl font-medium ml-2 lg:text-base lg:text-nowrap lgs:text-base xs:text-2xl xs:ml-0 xs:font-normal">{((weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1)))}</h1>
-                                </div>
-                            </div>
-                            <div className="date-time w-11/12 h-12 mt-3 m-auto xs:mt-0 xs:mr-5">
-                                <div className="location ml-2 xs:ml-0">
-                                    <div className="flex items-center justify-start">
-                                    <CiLocationOn className="xs:hidden"/>
-                                    <h1 className="font-medium ml-2 text-lg lg:text-sm lgs:text-sm xs:text-sm xs:ml-0">{weatherData.name}, {weatherData.sys.country}</h1>
+        <main style={{backgroundColor: `${backgroundColor}`}} className="w-full h-full pt-2 m-auto min-h-screen">
+            <div className="upper-info w-[98%] min-h-[50vh] mt-5 m-auto flex xs:flex-col xs:items-center xs:w-full ">
+                <div className="extra-info-weather-overview">
+                    <div style={{color: `${textColor}`}} className="weather-overview border h-full w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
+                            {weatherData && (
+                                <div>
+                                <div className="temperature w-full h-[150px] rounded-[1rem] flex 1xl:flex-col 1xl:items-center xs:flex-row-reverse">
+                                    <div className="weather-image w-[190px] h-[190px] m-2 rounded-[1rem] flex justify-center items-center">
+                                        <img src={changeIcon(weatherData.weather[0].icon)} className='ml-4 1xl:h-[160px] 1xl:w-[160px] xs:w-[100px] xs:h-[100px] xs:mt-1' alt="" />
+                                    </div>
+                                    <div className="weather-temp w-[190px] h-[190px]  m-2 mr-3  rounded-[1rem] flex justify-center items-center xs:ml-0 xs:mr-20">
+                                        <h2 className="text-7xl font-base 1xl:text-5xl xs:ml-0">{weatherData.main.temp.toFixed(0)}°</h2>
                                     </div>
                                 </div>
-                                <div className="time ml-2 xs:ml-0">
-                                    <div className="flex items-center">
-                                        <CiCalendarDate className="xs:hidden"/>
-                                        <h1 className="text-lg font-medium ml-2 lg:text-sm lgs:text-sm xs:text-sm xs:ml-0">
-                                    {(new Date(weatherData.dt * 1000).getDate())} {Month[(new Date(weatherData.dt * 1000).getMonth())]} {(new Date(weatherData.dt * 1000).getFullYear())},{(new Date(weatherData.dt * 1000).getHours())}:{(new Date(weatherData.dt * 1000).getMinutes())}
-                                    </h1>
+                                <div className="all-three ml-5 mt-3">
+                                    <div className="weather-name border-b w-8/12 h-12 ml-6 flex items-end md:mt-3 xs:border-none xs:ml-2">
+                                        <div className="flex items-center md:mt-4 xxs:mb-2">
+                                            <TiWeatherCloudy className="xs:hidden"/>
+                                            <h1 className="text-xl font-medium ml-2 lg:text-base lg:text-nowrap lgs:text-base xs:text-2xl xs:ml-2 xs:font-normal">{((weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1)))}</h1>
+                                        </div>
+                                    </div>
+                                    <div className="date-time w-11/12 h-12 mt-3 m-auto xs:mt-0 xs:mr-5">
+                                        <div className="location ml-2 xs:ml-0">
+                                            <div className="flex items-center justify-start">
+                                            <CiLocationOn className="xs:hidden"/>
+                                            <h1 className="font-medium ml-2 text-lg lg:text-sm lgs:text-sm xs:text-sm xs:ml-0">{weatherData.name}, {weatherData.sys.country}</h1>
+                                            </div>
+                                        </div>
+                                        <div className="time ml-2 xs:ml-0">
+                                            <div className="flex items-center">
+                                                <CiCalendarDate className="xs:hidden"/>
+                                                <h1 className="text-lg font-medium ml-2 lg:text-sm lgs:text-sm xs:text-sm xs:ml-0">
+                                            {(new Date(weatherData.dt * 1000).getDate())} {Month[(new Date(weatherData.dt * 1000).getMonth())]} {(new Date(weatherData.dt * 1000).getFullYear())},{(new Date(weatherData.dt * 1000).getHours())}:{(new Date(weatherData.dt * 1000).getMinutes())}
+                                            </h1>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        )}
+                            )}
+                            <div className="extra-info hidden xs:block mt-4">
+                            <ul className="grid  grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
+                                {extra_weather.map((val, ind) => (
+                                    <li key={ind} className="border h-[160px] flex flex-col items-center justify-center rounded-[0.75rem]">
+                                        <h3 className="text-base text-center">{val.extra_name}</h3>
+                                        <img src={val.extra_icon} alt="" className="h-[20px] w-[20px] mb-2" />
+                                        <h3 className="text-center">{val.extra_val}</h3>
+                                    </li>
+                                    ))}
+                                </ul>
+                            </div>
+                    </div>
                 </div>
-                <div className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-full  xs:rounded xs:h-[25vh] 1xl:w-8/12 xs:border-hidden xs:w-[95vw] xs:mr-1 xs:mt-9 xs:rounded-[0.75rem]">
-                <div className="h-[300px]  w-11/12 m-[40px] mt-[60px] xs:mx-1 xs:border-hidden xs:mr-8 xs:my-8 xs:h-[150px] xs:ml-4 xs:mt-12">
+                <div style={{backgroundColor: `${childElementColor}`}} className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-[96%]  xs:rounded xs:h-[25vh] 1xl:w-8/12 xs:border-hidden xs:w-[95vw] xs:mr-1 xs:mt-9 xs:rounded-[0.75rem]">
+                <div  className="h-[300px]  w-11/12 m-[40px] mt-[60px] xs:mx-1 xs:border-hidden xs:mr-8 xs:my-8 xs:h-[150px] xs:ml-4 xs:mt-12">
                     <LineChart data={data} options={options} />
                 </div>
                 </div>
             </div>
-            <div className="lower-info min-h-[50vh] mt-1 flex xs:flex-col mt-10  xs:mr-1 xs:text-slate-50">
-                <div className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[93vw] xs:ml-0  xs:rounded-[0.75rem]  xs:border-hidden xs:ml-[-3px]">
+            <div className="lower-info w-[98%] m-auto min-h-[50vh] mt-1 flex xs:flex-col mt-10  xs:mr-1 xs:text-slate-50">
+                <div style={{backgroundColor: `${childElementColor}`}}  className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:rounded-[0.75rem]  xs:border-hidden xs:ml-2">
                     <div className="forecast-title">
                         <h1 className="text-2xl font-bold ml-4 mt-4">Forecast(Next 3-hours) </h1>
 
@@ -276,7 +431,6 @@ export const Weather: React.FC = () => {
 
                     <ul className="h-5/6 mt-5">
                         <div className="weather-analysis">
-
                         </div>
                             {forecastData && (
                                 forecastData.list.slice(0,6).map((forecast , idx) => (
