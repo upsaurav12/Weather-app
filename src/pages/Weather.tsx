@@ -364,8 +364,8 @@ export const Weather: React.FC = () => {
     if (error) return <div>Error: {error}</div>
     return (
         <main style={{backgroundColor: `${backgroundColor}`}} className="w-full h-full pt-2 m-auto min-h-screen">
-            <div className="upper-info w-[98%] min-h-[50vh] mt-5 m-auto flex xs:flex-col xs:items-center xs:w-full ">
-                <div className="extra-info-weather-overview">
+            <div className="upper-info w-[98%] min-h-[50vh] mt-5 m-auto flex xs:flex-col xs:items-center xs:w-full">
+                <div className="extra-info-weather-overview xs:w-full">
                     <div style={{color: `${textColor}`}} className="weather-overview border h-full w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
                             {weatherData && (
                                 <div>
