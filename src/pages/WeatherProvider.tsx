@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import  { createContext, useState, ReactNode } from 'react';
 import { WeatherData } from '../component/type';
 // Define your context type
 interface WeatherContextType {
@@ -21,6 +21,7 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
 };
 
 // Custom hook for consuming the weather context
+/*
 export const useWeather = () => {
     const context = useContext(WeatherContext);
     if (!context) {
@@ -28,3 +29,4 @@ export const useWeather = () => {
     }
     return context;
 };
+*/
