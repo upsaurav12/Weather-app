@@ -499,8 +499,8 @@ export const Weather: React.FC = () => {
     if (Loading) return <div>Loading.....</div>
     if (error) return <div>Error: {error}</div>
     return (
-        <main style={{backgroundColor: `${backgroundColor}`}} className="w-full h-full pt-2 m-auto min-h-screen">
-            <div className="upper-info w-[98%] min-h-[50vh] mt-5 m-auto flex xs:flex-col xs:items-center xs:w-full">
+        <main style={{backgroundColor: `${backgroundColor}`}} className="w-full h-full m-auto min-h-screen">
+            <div className="upper-info w-[98%] min-h-[50vh] ml-8 m-auto xs:ml-0 flex xs:flex-col xs:items-center xs:w-full">
                 <div className="extra-info-weather-overview xs:w-full xs:min-h-[60vh]">
                     {weatherData && (
                         <div style={{color: `${textColor}`}} className="weather-overview border h-full w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
@@ -558,7 +558,7 @@ export const Weather: React.FC = () => {
                 </div>
                 </div>
             </div>
-            <div className="lower-info w-[98%] m-auto min-h-[50vh] mt-1 flex xs:flex-col mt-10  xs:mr-1 xs:text-slate-50">
+            <div className="lower-info w-[98%] m-auto min-h-[48vh] mt-1 ml-8 flex xs:ml-0 xs:flex-col xs:mr-1 xs:text-slate-50">
                 <div style={{backgroundColor: `${childElementColor}`}}  className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:rounded-[0.75rem]  xs:border-hidden xs:ml-2">
                     <div className="forecast-title">
                         <h1 style={{color: `${textColor}`}} className="text-2xl font-bold ml-4 mt-4">Forecast(Next 3-hours)</h1>
@@ -575,7 +575,7 @@ export const Weather: React.FC = () => {
                                             alt={forecast.weather[0].description} className="ml-2 h-[45px] w-[45px] m-1"
                                         />
                                         <p style={{color: `${textColor}`}} className="mr-3 font-medium">{forecast.main.temp.toFixed(0)}°C</p>
-                                        <h3 style={{color: `${textColor}`}} className="mr-1 font-medium xs:mr-[20px]">{new Date(forecast.dt * 1000).getDate()} {Month[new Date(forecast.dt * 1000).getMonth()]}</h3>
+                                        <h3 style={{color: `${textColor}`}} className="mr-4 font-medium xs:mr-[20px]">{new Date(forecast.dt * 1000).getDate()} {Month[new Date(forecast.dt * 1000).getMonth()]}</h3>
                                         {/*<p className="mr-4">{forecast.main.temp.toFixed(0)}°C</p>*/}
                                     </div>
                                 ))
