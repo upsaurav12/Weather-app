@@ -99,39 +99,55 @@ export const Weather: React.FC = () => {
 
     const weather_theme: weatherTheme[] = [
         { 
-            weather_name: "50n", 
+            weather_name: "50n", // Mist (night)
             weather_color: "#2C3E50", 
             colors: {
                 text_color: "#FFFFFF", 
-                child_element_color: "#BDC3C7"
+                child_element_color: "rgb(0, 34, 57)"
             }
         },
         { 
-            weather_name: "50d", 
+            weather_name: "50d", // Mist (day)
             weather_color: "#D9CBA0", 
             colors: {
                 text_color: "#34495E", 
-                child_element_color: "#8B4513"
+                child_element_color: "rgb(198, 142, 11)"
             }
         },
         { 
-            weather_name: "01d", 
-            weather_color: "#87CEEB", 
+            weather_name: "01d", // Clear sky (day)
+            weather_color: "#87ceeb", 
             colors: {
                 text_color: "#000000", 
-                child_element_color: "#005B99"
+                child_element_color: "rgb(11, 163, 198)"
             }
         },
         { 
-            weather_name: "01n", 
-            weather_color: "#34495E", 
+            weather_name: "01n", // Clear sky (night)
+            weather_color: "#162b42", 
             colors: {
                 text_color: "#FFFFFF", 
-                child_element_color: "#BDC3C7"
+                child_element_color: "rgb(4, 54, 66)"
             }
         },
         { 
-            weather_name: "03d", 
+            weather_name: "02d", // Few clouds (day)
+            weather_color: "#A9CCE3", 
+            colors: {
+                text_color: "#154360", 
+                child_element_color: "rgb(59, 147, 168)"
+            }
+        },
+        { 
+            weather_name: "02n", // Few clouds (night)
+            weather_color: "#5D6D7E", 
+            colors: {
+                text_color: "#EAECEE", 
+                child_element_color: "rgb(41, 80, 89)"
+            }
+        },
+        { 
+            weather_name: "03d", // Scattered clouds (day)
             weather_color: "#D3D3D3", 
             colors: {
                 text_color: "#2C3E50", 
@@ -139,14 +155,95 @@ export const Weather: React.FC = () => {
             }
         },
         { 
-            weather_name: "03n", 
+            weather_name: "03n", // Scattered clouds (night)
             weather_color: "#B0BEC5", 
             colors: {
                 text_color: "#000000", 
                 child_element_color: "#37474F"
             }
+        },
+        { 
+            weather_name: "04d", // Broken clouds (day)
+            weather_color: "#B3B6B7", 
+            colors: {
+                text_color: "#1F2833", 
+                child_element_color: "rgb(92, 124, 132)"
+            }
+        },
+        { 
+            weather_name: "04n", // Broken clouds (night)
+            weather_color: "#5D6D7E", 
+            colors: {
+                text_color: "#EAECEE", 
+                child_element_color: "rgb(55, 76, 81)"
+            }
+        },
+        { 
+            weather_name: "09d", // Shower rain (day)
+            weather_color: "#5DADE2", 
+            colors: {
+                text_color: "#1A5276", 
+                child_element_color: "rgb(30, 112, 132)"
+            }
+        },
+        { 
+            weather_name: "09n", // Shower rain (night)
+            weather_color: "#34495E", 
+            colors: {
+                text_color: "#ECF0F1", 
+                child_element_color: "rgb(3, 76, 94)"
+            }
+        },
+        { 
+            weather_name: "10d", // Rain (day)
+            weather_color: "#85C1E9", 
+            colors: {
+                text_color: "#154360", 
+                child_element_color: "rgb(22, 112, 134)"
+            }
+        },
+        { 
+            weather_name: "10n", // Rain (night)
+            weather_color: "#2E4053", 
+            colors: {
+                text_color: "#D6EAF8", 
+                child_element_color: "rgb(40, 76, 85)"
+            }
+        },
+        { 
+            weather_name: "11d", // Thunderstorm (day)
+            weather_color: "#34495E", 
+            colors: {
+                text_color: "#F5B041", 
+                child_element_color: "rgb(58, 105, 117)"
+            }
+        },
+        { 
+            weather_name: "11n", // Thunderstorm (night)
+            weather_color: "#17202A", 
+            colors: {
+                text_color: "#E74C3C", 
+                child_element_color: "rgb(40, 76, 85)"
+            }
+        },
+        { 
+            weather_name: "13d", // Snow (day)
+            weather_color: "#E5E8E8", 
+            colors: {
+                text_color: "#2C3E50", 
+                child_element_color: "rgb(128, 180, 193)"
+            }
+        },
+        { 
+            weather_name: "13n", // Snow (night)
+            weather_color: "#85929E", 
+            colors: {
+                text_color: "#FFFFFF", 
+                child_element_color: "#AAB7B8"
+            }
         }
     ];
+    
 
     const weatherKey = weatherData?.weather[0]?.icon || "50n"; // Fallback to "50n"
     
@@ -365,56 +462,56 @@ export const Weather: React.FC = () => {
     return (
         <main style={{backgroundColor: `${backgroundColor}`}} className="w-full h-full pt-2 m-auto min-h-screen">
             <div className="upper-info w-[98%] min-h-[50vh] mt-5 m-auto flex xs:flex-col xs:items-center xs:w-full">
-                <div className="extra-info-weather-overview xs:w-full">
-                    <div style={{color: `${textColor}`}} className="weather-overview border h-full w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
-                            {weatherData && (
-                                <div>
-                                <div className="temperature w-full h-[150px] rounded-[1rem] flex 1xl:flex-col 1xl:items-center xs:flex-row-reverse">
-                                    <div className="weather-image w-[190px] h-[190px] m-2 rounded-[1rem] flex justify-center items-center">
-                                        <img src={changeIcon(weatherData.weather[0].icon)} className='ml-4 1xl:h-[160px] 1xl:w-[160px] xs:w-[100px] xs:h-[100px] xs:mt-1' alt="" />
-                                    </div>
-                                    <div className="weather-temp w-[190px] h-[190px]  m-2 mr-3  rounded-[1rem] flex justify-center items-center xs:ml-0 xs:mr-20">
-                                        <h2 className="text-7xl font-base 1xl:text-5xl xs:ml-0">{weatherData.main.temp.toFixed(0)}°</h2>
+                <div className="extra-info-weather-overview xs:w-full xs:min-h-[60vh]">
+                    {weatherData && (
+                        <div style={{color: `${textColor}`}} className="weather-overview border h-full w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
+                        <div>
+                            <div className="temperature w-full h-[150px] rounded-[1rem] flex 1xl:flex-col 1xl:items-center xs:flex-row-reverse">
+                                <div className="weather-image w-[190px] h-[190px] m-2 rounded-[1rem] flex justify-center items-center">
+                                    <img src={changeIcon(weatherData.weather[0].icon)} className='ml-4 1xl:h-[160px] 1xl:w-[160px] xs:w-[100px] xs:h-[100px] xs:mt-1' alt="" />
+                                </div>
+                                <div className="weather-temp w-[190px] h-[190px]  m-2 mr-3  rounded-[1rem] flex justify-center items-center xs:ml-0 xs:mr-20">
+                                    <h2 className="text-7xl font-base 1xl:text-5xl xs:ml-0">{weatherData.main.temp.toFixed(0)}°</h2>
+                                </div>
+                            </div>
+                            <div className="all-three ml-5 mt-3">
+                                <div className="weather-name border-b w-8/12 h-12 ml-6 flex items-end md:mt-3 xs:border-none xs:ml-2">
+                                    <div className="flex items-center md:mt-4 xxs:mb-2">
+                                        <TiWeatherCloudy className="xs:hidden"/>
+                                        <h1 className="text-xl font-medium ml-2 lg:text-base lg:text-nowrap lgs:text-base xs:text-2xl xs:ml-2 xs:font-normal">{((weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1)))}</h1>
                                     </div>
                                 </div>
-                                <div className="all-three ml-5 mt-3">
-                                    <div className="weather-name border-b w-8/12 h-12 ml-6 flex items-end md:mt-3 xs:border-none xs:ml-2">
-                                        <div className="flex items-center md:mt-4 xxs:mb-2">
-                                            <TiWeatherCloudy className="xs:hidden"/>
-                                            <h1 className="text-xl font-medium ml-2 lg:text-base lg:text-nowrap lgs:text-base xs:text-2xl xs:ml-2 xs:font-normal">{((weatherData.weather[0].description.charAt(0).toUpperCase() + weatherData.weather[0].description.slice(1)))}</h1>
+                                <div className="date-time w-11/12 h-12 mt-3 m-auto xs:mt-0 xs:mr-5">
+                                    <div className="location ml-2 xs:ml-0">
+                                        <div className="flex items-center justify-start">
+                                        <CiLocationOn className="xs:hidden"/>
+                                        <h1 className="font-medium ml-2 text-lg lg:text-sm lgs:text-sm xs:text-sm xs:ml-0">{weatherData.name}, {weatherData.sys.country}</h1>
                                         </div>
                                     </div>
-                                    <div className="date-time w-11/12 h-12 mt-3 m-auto xs:mt-0 xs:mr-5">
-                                        <div className="location ml-2 xs:ml-0">
-                                            <div className="flex items-center justify-start">
-                                            <CiLocationOn className="xs:hidden"/>
-                                            <h1 className="font-medium ml-2 text-lg lg:text-sm lgs:text-sm xs:text-sm xs:ml-0">{weatherData.name}, {weatherData.sys.country}</h1>
-                                            </div>
-                                        </div>
-                                        <div className="time ml-2 xs:ml-0">
-                                            <div className="flex items-center">
-                                                <CiCalendarDate className="xs:hidden"/>
-                                                <h1 className="text-lg font-medium ml-2 lg:text-sm lgs:text-sm xs:text-sm xs:ml-0">
-                                            {(new Date(weatherData.dt * 1000).getDate())} {Month[(new Date(weatherData.dt * 1000).getMonth())]} {(new Date(weatherData.dt * 1000).getFullYear())},{(new Date(weatherData.dt * 1000).getHours())}:{(new Date(weatherData.dt * 1000).getMinutes())}
-                                            </h1>
-                                            </div>
+                                    <div className="time ml-2 xs:ml-0">
+                                        <div className="flex items-center">
+                                            <CiCalendarDate className="xs:hidden"/>
+                                            <h1 className="text-lg font-medium ml-2 lg:text-sm lgs:text-sm xs:text-sm xs:ml-0">
+                                        {(new Date(weatherData.dt * 1000).getDate())} {Month[(new Date(weatherData.dt * 1000).getMonth())]} {(new Date(weatherData.dt * 1000).getFullYear())},{(new Date(weatherData.dt * 1000).getHours())}:{(new Date(weatherData.dt * 1000).getMinutes())}
+                                        </h1>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            )}
-                            <div className="extra-info hidden xs:block mt-4">
-                            <ul className="grid  grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
-                                {extra_weather.map((val, ind) => (
-                                    <li key={ind} className="border h-[160px] flex flex-col items-center justify-center rounded-[0.75rem]">
-                                        <h3 className="text-base text-center">{val.extra_name}</h3>
-                                        <img src={val.extra_icon} alt="" className="h-[20px] w-[20px] mb-2" />
-                                        <h3 className="text-center">{val.extra_val}</h3>
-                                    </li>
-                                    ))}
-                                </ul>
-                            </div>
-                    </div>
+                        </div>
+                        <div className="extra-info hidden xs:block mt-4">
+                        <ul className="grid  grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
+                            {extra_weather.map((val, ind) => (
+                                <li key={ind} className="border h-[160px] flex flex-col items-center justify-center rounded-[0.75rem]">
+                                    <h3 className="text-base text-center">{val.extra_name}</h3>
+                                    <img src={val.extra_icon} alt="" className="h-[20px] w-[20px] mb-2" />
+                                    <h3 className="text-center">{val.extra_val}</h3>
+                                </li>
+                                ))}
+                            </ul>
+                        </div>
+                </div>
+                    )}
                 </div>
                 <div style={{backgroundColor: `${childElementColor}`}} className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-[96%]  xs:rounded xs:h-[25vh] 1xl:w-8/12 xs:border-hidden xs:w-[95vw] xs:mr-1 xs:mt-9 xs:rounded-[0.75rem]">
                 <div  className="h-[300px]  w-11/12 m-[40px] mt-[60px] xs:mx-1 xs:border-hidden xs:mr-8 xs:my-8 xs:h-[150px] xs:ml-4 xs:mt-12">
@@ -425,7 +522,7 @@ export const Weather: React.FC = () => {
             <div className="lower-info w-[98%] m-auto min-h-[50vh] mt-1 flex xs:flex-col mt-10  xs:mr-1 xs:text-slate-50">
                 <div style={{backgroundColor: `${childElementColor}`}}  className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:rounded-[0.75rem]  xs:border-hidden xs:ml-2">
                     <div className="forecast-title">
-                        <h1 className="text-2xl font-bold ml-4 mt-4">Forecast(Next 3-hours) </h1>
+                        <h1 style={{color: `${textColor}`}} className="text-2xl font-bold ml-4 mt-4">Forecast(Next 3-hours)</h1>
 
                     </div>
 
@@ -438,8 +535,8 @@ export const Weather: React.FC = () => {
                                         <img src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`}
                                             alt={forecast.weather[0].description} className="ml-2"
                                         />
-                                        <p className="mr-3 font-medium">{forecast.main.temp.toFixed(0)}°C</p>
-                                        <h3 className="mr-1 font-medium xs:mr-[20px]">{new Date(forecast.dt * 1000).getDate()} {Month[new Date(forecast.dt * 1000).getMonth()]}</h3>
+                                        <p style={{color: `${textColor}`}} className="mr-3 font-medium">{forecast.main.temp.toFixed(0)}°C</p>
+                                        <h3 style={{color: `${textColor}`}} className="mr-1 font-medium xs:mr-[20px]">{new Date(forecast.dt * 1000).getDate()} {Month[new Date(forecast.dt * 1000).getMonth()]}</h3>
                                         {/*<p className="mr-4">{forecast.main.temp.toFixed(0)}°C</p>*/}
                                     </div>
                                 ))
