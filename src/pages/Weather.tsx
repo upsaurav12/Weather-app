@@ -3,6 +3,10 @@ import { ForecastData , WeatherData, CachedData} from "../component/type"; // En
 import './Weather.css';
 import cloud from '../assets/Vector.svg';
 import icon from '../assets/react.svg';
+import thunderstorm from '../assets/Thunderstorm-day.svg';
+import thunderstorm_night from '../assets/thunderstorm-night.svg'
+import rainy_day from '../assets/rain-day.svg';
+import rainy_night from '../assets/rain-night.svg';
 import haze from '../assets/Haze.svg';
 import night_cloud from '../assets/Night-cloud.svg';
 import night from '../assets/Night.svg';
@@ -51,6 +55,39 @@ export const Weather: React.FC = () => {
         extra_val?: number | undefined | string,
     }
 
+    interface weatherIcon {
+        icon_name: string, 
+        icon_image: string,
+    }
+
+    const weather_icon:weatherIcon[] = [
+        {icon_name: "01d" , icon_image: sunny},
+        {icon_name: "01n" , icon_image: night},
+        {icon_name: "02d" , icon_image: cloud},
+        {icon_name: "02n" , icon_image: night_cloud},
+        {icon_name: "50n", icon_image: night_haze},
+        {icon_name: "50d", icon_image: haze},
+        {icon_name: "03d", icon_image: cloud},
+        {icon_name: "03n", icon_image: night_cloud},
+        {icon_name: "04d", icon_image: cloud},
+        {icon_name: "04n", icon_image: night_cloud},
+        {icon_name: "09d", icon_image: rainy_day},
+        {icon_name: "09n", icon_image: rainy_night},
+        {icon_name: "10d", icon_image: rainy_day},
+        {icon_name: "10n", icon_image: rainy_night},
+        {icon_name: "11d", icon_image: thunderstorm},
+        {icon_name: "11n", icon_image: thunderstorm_night},
+    ]
+
+    console.log(forecastData?.list[0].weather[0].icon)
+
+
+    const changeForecastIcon = (key:string) => {
+        const forecast_icon = weather_icon.find((i) => i.icon_name === key)
+        return forecast_icon ? forecast_icon.icon_image : haze;
+
+    }
+
     const convertUnixToTime = (unixTimestamp: number | undefined): string => {
         if (!unixTimestamp) return "N/A"; // Handle case where timestamp is undefined
         const date = new Date(unixTimestamp * 1000); // Convert to milliseconds
@@ -67,7 +104,7 @@ export const Weather: React.FC = () => {
         {extra_name: "Feels Like", extra_icon: Thermometer , extra_val: weatherData?.main.feels_like}
     ]
 
-    
+
     const weather_image:weatherImage[] = [
         {icon_image: cloud , icon_name: "Cloud"},
         {icon_image: icon , icon_name: "React"},
@@ -246,10 +283,12 @@ export const Weather: React.FC = () => {
     
 
     const weatherKey = weatherData?.weather[0]?.icon || "50n"; // Fallback to "50n"
+    const forecastKey = forecastData?.list[0].weather[0].icon || "50n";
     
     const backgroundColor = changeTheme(weatherKey);
     const textColor = changeTextColor(weatherKey);
     const childElementColor = changeChildElementColor(weatherKey);
+    const foreCastIcon = changeForecastIcon(forecastKey)
 
     const changeIcon = (key: string) => {
         const default_icon = cloud;
@@ -532,8 +571,8 @@ export const Weather: React.FC = () => {
                             {forecastData && (
                                 forecastData.list.slice(0,6).map((forecast , idx) => (
                                     <div key={idx} className="flex justify-between items-center">
-                                        <img src={`https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`}
-                                            alt={forecast.weather[0].description} className="ml-2"
+                                        <img src={foreCastIcon} 
+                                            alt={forecast.weather[0].description} className="ml-2 h-[45px] w-[45px] m-1"
                                         />
                                         <p style={{color: `${textColor}`}} className="mr-3 font-medium">{forecast.main.temp.toFixed(0)}°C</p>
                                         <h3 style={{color: `${textColor}`}} className="mr-1 font-medium xs:mr-[20px]">{new Date(forecast.dt * 1000).getDate()} {Month[new Date(forecast.dt * 1000).getMonth()]}</h3>
