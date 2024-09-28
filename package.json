@@ -17,6 +17,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
+    "lucide": "^0.446.0",
     "lucide-react": "^0.439.0",
     "postcss": "^8.4.41",
     "react": "^18.3.1",

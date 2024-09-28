@@ -7,10 +7,14 @@ import { CiLocationOn , CiCalendarDate  } from "react-icons/ci";
 import { TiWeatherCloudy } from "react-icons/ti";
 import { weather_image ,weather_icon, weather_theme , extraWeather, convertUnixToTime} from "../component/WeatherConstant";
 import LineChart from "./Chart";
-import Wind from '../assets/Wind1.svg';
-import Thermometer from '../assets/thermometer.svg';
-import Humidity from '../assets/Humidity.svg';
-import UV from '../assets/UV.svg'
+//import Wind from '../assets/Wind1.svg';
+//import Thermometer from '../assets/thermometer.svg';
+//import Humidity from '../assets/Humidity.svg';
+//import UV from '../assets/UV.svg'
+import { Thermometer } from 'lucide-react';
+import { Sunrise } from 'lucide-react';
+import { Droplets } from 'lucide-react';
+import { Wind } from 'lucide-react';
 //import { get } from "http";
 export const Weather: React.FC = () => {
     const [forecastData , setForcastData] = useState<ForecastData | null>(null);
@@ -64,10 +68,10 @@ export const Weather: React.FC = () => {
     }
 
     const extra_weather:extraWeather[] = [
-        {extra_name: "Sunrise" , extra_icon: Wind , extra_val: convertUnixToTime(weatherData?.sys?.sunrise)},
-        {extra_name: "Humidity", extra_icon: Humidity , extra_val:  weatherData?.main.humidity},
-        {extra_name: "UV Index", extra_icon: UV , extra_val: weatherData?.main.pressure},
-        {extra_name: "Feels Like", extra_icon: Thermometer , extra_val: weatherData?.main.feels_like}
+        {extra_name: "Wind Speed" , extra_icon: <Wind/> , extra_val: weatherData?.wind.speed + "Km/h"},
+        {extra_name: "Humidity", extra_icon: <Droplets/> , extra_val:  weatherData?.main.humidity},
+        {extra_name: "Sunrise", extra_icon: <Sunrise/> , extra_val: convertUnixToTime(weatherData?.sys.sunrise)},
+        {extra_name: "Feels Like", extra_icon: <Thermometer/> , extra_val: weatherData?.main.feels_like}
     ]
 
     const data = {
@@ -316,7 +320,7 @@ export const Weather: React.FC = () => {
                             {extra_weather.map((val, ind) => (
                                 <li key={ind} className="border h-[160px] flex flex-col items-center justify-center rounded-[0.75rem]">
                                     <h3 className="text-base text-center">{val.extra_name}</h3>
-                                    <img src={val.extra_icon} alt="" className="h-[20px] w-[20px] mb-2" />
+                                    <div className="h-[20px] w-[20px] mb-2" >{val.extra_icon}</div>
                                     <h3 className="text-center">{val.extra_val}</h3>
                                 </li>
                                 ))}
