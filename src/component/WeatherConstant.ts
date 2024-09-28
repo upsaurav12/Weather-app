@@ -8,6 +8,7 @@ import night_cloud from '../assets/Night-cloud.svg';
 import night from '../assets/Night.svg';
 import night_haze from '../assets/night-haze.svg'
 import sunny from '../assets/Sunny.svg';
+import { ReactNode } from 'react';
 
 interface weatherImage {
     icon_image: string,
@@ -31,7 +32,7 @@ interface weatherIcon {
 
 export interface extraWeather {
     extra_name: string,
-    extra_icon: string,
+    extra_icon: ReactNode,
     extra_val?: number | undefined | string,
 }
 
