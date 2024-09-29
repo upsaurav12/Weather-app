@@ -359,8 +359,10 @@ export const Weather: React.FC = () => {
                                             alt={forecast.weather[0].description} className="ml-2 h-[45px] w-[45px] m-1"
                                         />
                                         <p style={{color: `${textColor}`}} className="mr-3 font-medium">{forecast.main.temp.toFixed(0)}°C</p>
-                                        <h3 style={{color: `${textColor}`}} className="mr-4 font-medium xs:mr-[20px]">{new Date(forecast.dt * 1000).getDate()} {Month[new Date(forecast.dt * 1000).getMonth()]}</h3>
-                                        {/*<p className="mr-4">{forecast.main.temp.toFixed(0)}°C</p>*/}
+                                        <div className="date-hours flex items-center">
+                                            <h3 style={{color: `${textColor}`}} className="mr-4 font-medium xs:mr-[20px]">{new Date(forecast.dt * 1000).getHours()}: {new Date(forecast.dt * 1000).getMinutes()} </h3>
+                                            <p style={{color: `${textColor}`}}className="mr-4 text-[0.7rem]">{new Date(forecast.dt * 1000).getDate()}, {Month[new Date(forecast.dt * 1000).getMonth()]}</p>
+                                        </div>
                                     </div>
                                 ))
                             )}
