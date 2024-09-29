@@ -7,6 +7,8 @@ import { CiLocationOn , CiCalendarDate  } from "react-icons/ci";
 import { TiWeatherCloudy } from "react-icons/ti";
 import { weather_image ,weather_icon, weather_theme , extraWeather, convertUnixToTime} from "../component/WeatherConstant";
 import LineChart from "./Chart";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/button";
 //import Wind from '../assets/Wind1.svg';
 //import Thermometer from '../assets/thermometer.svg';
 //import Humidity from '../assets/Humidity.svg';
@@ -15,8 +17,10 @@ import { Thermometer } from 'lucide-react';
 import { Sunrise } from 'lucide-react';
 import { Droplets } from 'lucide-react';
 import { Wind } from 'lucide-react';
+import { Search } from "lucide-react";
 //import { get } from "http";
 export const Weather: React.FC = () => {
+    const navigate = useNavigate(); 
     const [forecastData , setForcastData] = useState<ForecastData | null>(null);
     const [error , setError] = useState<string| null> (null);
     const [weatherData , setWeatherData] = useState<WeatherData | null> (null);
@@ -199,7 +203,7 @@ export const Weather: React.FC = () => {
         }
 
         
-        const DisplayWeatherAndForecast = useCallback(async () => {
+         const DisplayWeatherAndForecast = useCallback(async () => {
             console.log('Fetching weather and forecast data call back...'); // Log when fetching starts
             if ( !location) return;
             setLoading(true);
@@ -277,6 +281,9 @@ export const Weather: React.FC = () => {
     if (error) return <div>Error: {error}</div>
     return (
         <main style={{backgroundColor: `${backgroundColor}`}} className="w-full h-full m-auto min-h-screen">
+            <Button onClick={() => navigate('/search')} className="absolute">
+                <Search/>
+            </Button>
             <div className="upper-info w-[98%] min-h-[50vh] ml-8 m-auto xs:ml-0 flex xs:flex-col xs:items-center xs:w-full">
                 <div className="extra-info-weather-overview xs:w-full xs:min-h-[60vh]">
                     {weatherData && (

@@ -1,0 +1,23 @@
+html , body {
+    height: 100%;
+}
+#root {
+    border: 1px solid;
+    height: 100%;
+}
+
+.loader {
+    border: 8px solid rgba(0, 0, 0, 0.1); /* Light border */
+    border-left-color: #007bff; /* Blue border */
+    border-radius: 50%; /* Round shape */
+    width: 40px; /* Size of the spinner */
+    height: 40px; /* Size of the spinner */
+    animation: spin 1s linear infinite; /* Spin animation */
+    margin-left: 50%;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg); /* Complete rotation */
+    }
+}

@@ -1,13 +1,26 @@
 //import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './App.tsx'
 import './index.css'
+import {createBrowserRouter} from "react-router-dom";
+import { RouterProvider } from 'react-router-dom';
+import { StrictMode } from 'react';
+import { SearchWeather } from './pages/Weather-search.tsx';
 
-const queryClient = new QueryClient()
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App/>,
+  },
+  {
+    path: "/search",
+    element: <SearchWeather/>
+  }
+])
 
 createRoot(document.getElementById('root')!).render(
-  <QueryClientProvider client={queryClient}>
-    <App />
-  </QueryClientProvider>,
+  <StrictMode>
+    <RouterProvider router={router}/>
+  </StrictMode>,
 )
