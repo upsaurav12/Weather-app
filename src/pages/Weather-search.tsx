@@ -1,8 +1,9 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import './Search.css';
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { WeatherData } from "../component/type";
+import { Skeleton } from "../components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
 import { House } from "lucide-react";
 
@@ -44,11 +45,8 @@ export const SearchWeather: React.FC = () => {
         }
     };
 
-    if (loading) return <div className="loader"></div>;
-    if (error) return <div className="text-red-500">Error: {error}</div>;
-
     return (
-        <main className="border w-11/12 h-[98%] mt-2 m-auto">
+        <main className="border h-[98vh] w-11/12 h-[98%] mt-2 m-auto">
             <Button className="absolute" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
             <div className="search-container">
                 <form onSubmit={displayWeather} className="flex mt-4 w-5/12 m-auto xs:w-full">
@@ -61,19 +59,31 @@ export const SearchWeather: React.FC = () => {
                 </form>
             </div>
 
-            <div className="weather-data mt-4">
-                {weather && (
-                    <div className="weather bg-blue-50 p-4 rounded-lg">
-                        <h2 className="text-xl font-bold">{weather.name}, {weather.sys.country}</h2>
-                        <p>Temperature: {weather.main.temp}°C</p>
-                        <p>Pressure: {weather.main.pressure} hPa</p>
-                        <p>Humidity: {weather.main.humidity}%</p>
-                        <p>Visibility: {weather.visibility / 1000} km</p>
-                        <p>Conditions: {weather.weather[0].description}</p>
-                        <p>Cloud Cover: {weather.clouds.all}%</p>
+            {loading ? (
+                // Render Skeleton while data is being fetched
+                <div className="weather-info border w-[300px] h-[344px] ml-4 rounded-[1rem] mt-4">
+                    <div className="weather-info-upper">
+                        <Skeleton className="h-[230px] rounded-[1rem] border"/>
                     </div>
-                )}
-            </div>
+                    <div className="lower-info mt-3 h-[100px]">
+                        <Skeleton className="h-[100px] rounded-[1rem]"/>
+                    </div>
+                </div>
+            ) : weather ? (
+                // Show weather data once it is loaded
+                <div className="weather-info border w-[300px] h-[344px] ml-4 rounded-[1rem] mt-4">
+                    <div className="weather">
+                        <p>Humidity: {weather.main.humidity}%</p>
+                        <p>Description: {weather.weather[0].description}</p>
+                        <p>City: {weather.name}</p>
+                        <p>Clouds: {weather.clouds.all}%</p>
+                        <p>Timezone: {weather.timezone}</p>
+                    </div>
+                </div>
+            ) : error ? (
+                // Display error message if an error occurred
+                <div className="text-red-500 mt-4">{error}</div>
+            ) : null}
         </main>
     );
-}
+};
