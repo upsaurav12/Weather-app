@@ -9,9 +9,13 @@ import { ChevronRight , ChevronLeft } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
 import { extraWeather , convertUnixToTime} from "../component/WeatherConstant";
 import { Table,TableBody,TableCell,TableHead,TableHeader,TableRow,} from "../components/ui/table"
-import { weather_image } from "../component/WeatherConstant";
+import { weather_image , weather_theme } from "../component/WeatherConstant";
 import { Thermometer } from 'lucide-react';
-import { Sunrise } from 'lucide-react';
+import { Cloud } from "lucide-react";
+import { Calendar } from "lucide-react";
+import { Clock } from "lucide-react";
+import { MapPin } from "lucide-react";
+import { Sunrise , Sunset} from 'lucide-react';
 import { Droplets } from 'lucide-react';
 import { Wind } from 'lucide-react';
 import './Weather-search.css'
@@ -36,6 +40,8 @@ export const SearchWeather: React.FC = () => {
     const [forecast , setForecast] = useState<ForecastData | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const getCurrentUnixTime = () => Math.floor(new Date().getTime() / 1000);
+    const isDay = weather && getCurrentUnixTime() >= weather.sys.sunrise && getCurrentUnixTime() <= weather.sys.sunset;
     const navigate = useNavigate(); 
     const [nextState , setNext] = useState(0);
     const apiKey = import.meta.env.VITE_API_TOKEN;
@@ -43,9 +49,9 @@ export const SearchWeather: React.FC = () => {
 
     const extra_weather:extraWeather[] = [
         {extra_name: "Wind Speed" , extra_icon: <Wind/> , extra_val: weather?.wind.speed + "Km/h"},
-        {extra_name: "Humidity", extra_icon: <Droplets/> , extra_val:  weather?.main.humidity},
-        {extra_name: "Sunrise", extra_icon: <Sunrise/> , extra_val: convertUnixToTime(weather?.sys.sunrise)},
-        {extra_name: "Feels Like", extra_icon: <Thermometer/> , extra_val: weather?.main.feels_like}
+        {extra_name: "Humidity", extra_icon: <Droplets/> , extra_val:  weather?.main.humidity + "g/Kg"},
+        isDay ? { extra_name: "Sunset", extra_icon: <Sunset />, extra_val: convertUnixToTime(weather?.sys.sunset) + " PM"} : { extra_name: "Sunrise", extra_icon: <Sunrise />, extra_val: convertUnixToTime(weather?.sys.sunrise) + " AM" },
+        {extra_name: "Feels Like", extra_icon: <Thermometer/> , extra_val: weather?.main.feels_like + "°"}
     ]
 
     const humidity_chart = forecast?.list.slice(0,10).map((i) => {
@@ -74,8 +80,28 @@ export const SearchWeather: React.FC = () => {
         console.log(key)
         return image ? image.icon_image : undefined
     }
- 
+
+    const changeWeatherTheme = (key: string | undefined) => {
+        const theme = weather_theme.find((i) => i.weather_name === key)
+
+        return theme ? theme.weather_color : undefined
+    }
+
+    const changeChild = (key: string | undefined) => {
+        const color = weather_theme.find((i) => i.weather_name === key )
+        return color ? color.colors.child_element_color : undefined
+    }
+
+    const changeText = (key: string | undefined) => {
+        const color = weather_theme.find((i) => i.weather_name === key )
+        return color ? color.colors.text_color : undefined
+    }
+
+
+    const weather_theme_change = changeWeatherTheme(weather?.weather[0].icon)
     const weather_image_change = changeWeatherImage(weather?.weather[0].icon)
+    const weather_child_change = changeChild(weather?.weather[0].icon)
+    const weather_child_text = changeText(weather?.weather[0].icon)
 
 
       const weather_chart = [
@@ -148,8 +174,8 @@ export const SearchWeather: React.FC = () => {
         console.log(weather_chart[nextState])
     }
     return (
-        <main  className="h-[full] w-[98vw] h-[98%] mt-2 m-auto">
-            <Button className="absolute xs:top-[1px]" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
+        <main style={{backgroundColor : `${weather_theme_change}`}} className="h-[full] w-[100vw] pt-2 pb-6 xs:w-[100vw] h-[98%] m-auto">
+            <Button className="absolute left-[20px] xs:top-[1px] xs:left-[1px]" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
             <div className="search-container">
                 <form onSubmit={displayWeather} className="flex mt-4 w-5/12 m-auto xs:w-full">
                     <Input className="xs:mt-6"
@@ -194,53 +220,65 @@ export const SearchWeather: React.FC = () => {
             ) : weather && forecast ? (
                 // Show weather data and analysis when data is loaded
                 <>
-                <div className="upper-info flex items-between justify-between xs:flex-col">
-                    <div className="weather-info-search mt-2 w-[20%] xs:w-11/12 xs:ml-3">
-                        {weather && (
-                            <div className="h-[350px] xs:border-0 border rounded-[0.87rem] shadow-1 xs:shadow-0">
-                            <div className="upper-weather-info">
-                                <div className="h-[225px] flex items-center justify-around 1xl:flex-col xs:flex-row-reverse">
-                                    <div className="weather-image">
-                                        <img src={weather_image_change} className="h-[140px] w-[140px]"  />
-                                    </div>
-                                    <div className="weather-temperature">
-                                        <h1 className="text-6xl xs:text-7xl xs:font-normal">{weather?.main.temp.toFixed(0)}°</h1>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="weather-description text-2xl ml-2 border-b w-7/12 font-medium xs:ml-10 xs:text-3xl">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</div>
+                <div className="upper-info flex items-between justify-between xs:flex-col w-[97%] m-auto">
+                <div className="weather-info-search mt-2 w-[20%] xs:w-11/12 xs:ml-3">
+  {weather && (
+    <div className="h-[350px] xs:border-0 border-gray-300 rounded-lg shadow-xl xs:shadow-none p-4">
+      <div className="upper-weather-info">
+        <div className="h-[225px] flex items-center justify-around 1xl:flex-col xs:flex-row-reverse">
+          <div className="weather-image">
+            <img src={weather_image_change} className="h-[140px] w-[140px]" alt="Weather Icon" />
+          </div>
+          <div className="weather-temperature">
+            <h1 style={{ color: `${weather_child_text}` }} className="text-6xl xs:text-7xl xs:font-normal">
+            {weather?.main.temp.toFixed(0)}°
+            </h1>
+          </div>
+        </div>
+      </div>
+      <div
+        style={{ color: `${weather_child_text}` }}
+        className="weather-description flex items-center text-2xl ml-6 border-b-2 xs:border-0 border-gray-300 w-7/12 font-medium xs:ml-10 xs:text-3xl"
+      >
+        <Cloud/><h1 className="xs:ml-2">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
+      </div>
 
-                            <div className="time-date-location ml-2 text-sm font-medium mt-2 xs:ml-10 xs:text-medium xs:m-5 xs:font-normal">
-                                    <div>
-                                        <div className="location">
-                                    <h1>{weather?.name}, {weather?.sys.country}</h1>
-                                </div>
+      <div
+        style={{ color: `${weather_child_text}` }}
+        className="time-date-location ml-6 text-sm font-medium mt-2 xs:ml-10 xs:text-[1rem] xs:m-5 xs:font-normal"
+      >
+        <div>
+          <div className="location flex items-center">
+            <MapPin/><h1>{weather?.name}, {weather?.sys.country}</h1>
+          </div>
+          <div className="date-time">
+            <h1 className="flex items-center mt-2"><Calendar className="mr-1"/>{new Date(weather.dt * 1000).getDate()}{Month[new Date(weather.dt * 1000).getMonth()]},{new Date(weather.dt * 1000).getFullYear()}<Clock className="ml-2 mr-1"/>{new Date(weather.dt * 1000).getHours()}:{new Date(weather.dt * 1000).getMinutes()}
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
 
-                                <div className="date-time">
-                                    <h1>{new Date(weather.dt * 1000).getDate()}{Month[new Date(weather.dt * 1000).getMonth()]},{new Date(weather.dt * 1000).getFullYear()} {new Date(weather.dt * 1000).getHours()}: {new Date(weather.dt * 1000).getMinutes()}</h1>
-                                </div>
-                                    </div>
-                            </div>
-                        </div>
-                        )}
-                        <div className="extra-info hidden xs:block mt-5">
-                        <ul className="grid  grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
-                            {extra_weather.map((val, ind) => (
-                                <li key={ind} className="border h-[160px] flex flex-col items-center justify-center rounded-[0.75rem]">
-                                    <h3 className="text-base text-center">{val.extra_name}</h3>
-                                    <div className="h-[20px] w-[20px] mb-2" >{val.extra_icon}</div>
-                                    <h3 className="text-center">{val.extra_val}</h3>
-                                </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
+  <div className="extra-info hidden xs:block mt-5">
+    <ul className="grid grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
+      {extra_weather.map((val, ind) => (
+        <li key={ind} className=" h-[160px] flex flex-col items-center justify-center rounded-lg shadow-md">
+          <h3 className="text-base text-center">{val.extra_name}</h3>
+          <div className="h-[20px] w-[20px] mb-2">{val.extra_icon}</div>
+          <h3 className="text-center">{val.extra_val}</h3>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
                     <div className="weather-analytics w-10/12 xs:w-[96%] xs:m-auto">
                         {weather_chart && (
-                            <Card className="h-[349px] ml-2 mt-2 xs:ml-0">
+                            <Card style={{backgroundColor : `${weather_child_change}` , color: `${weather_child_text}`}} className="h-[349px] border-0 ml-2 mt-2 xs:ml-0">
                             <CardHeader>
                                 <CardTitle>Weather Forecast</CardTitle>
-                                <CardDescription className="w-5/12 m-auto flex justify-center">{weather_chart[nextState].weather_type_name}</CardDescription>
+                                <CardDescription style={{color: `${weather_child_text}`}} className="w-5/12 m-auto flex justify-center">{weather_chart[nextState].weather_type_name}</CardDescription>
                                 <div className="slider-next w-full flex items-center justify-around">
                                 <ChevronLeft className="chevron xs:w-[40px] xs:h-[40px] xs:ml-2 xs:absolute xs:left-[0px]" onClick={handlePrev}/>
                                 <CardContent className="w-full">
@@ -253,6 +291,7 @@ export const SearchWeather: React.FC = () => {
                                                 axisLine={false}
                                                 tickMargin={3}
                                                 tickFormatter={(value) => `${value}:00`}
+                                                tick={{ fontSize: 12, fill: weather_child_text, fontWeight: 'bold' }}
                                             />
                                             <ChartTooltip
                                                 cursor={false}
@@ -296,22 +335,22 @@ export const SearchWeather: React.FC = () => {
             )}*/}
 
 
-            <div className="lower-info">
+            <div className="lower-info w-[97%] m-auto">
                 {forecast && (
-                    <Card className="weather-forecast mt-2 w-3/12 h-[350px] xs:w-full">
+                    <Card style={{backgroundColor : `${weather_child_change}`}} className="weather-forecast mt-2 px-2 xs:px-0 border-0 w-3/12 h-[350px] xs:w-[97%] xs:mx-auto">
                     <Table>
                         <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[100px]">Weather</TableHead>
-                                <TableHead>Temperature</TableHead>
-                                <TableHead>Time</TableHead>
-                                <TableHead className="text-right">Date</TableHead>
+                            <TableRow >
+                                <TableHead style={{color: `${weather_child_text}`}} className="w-[100px]">Weather</TableHead>
+                                <TableHead style={{color: `${weather_child_text}`}}>Temperature</TableHead>
+                                <TableHead style={{color: `${weather_child_text}`}}>Time</TableHead>
+                                <TableHead style={{color: `${weather_child_text}`}} className="text-right">Date</TableHead>
                             </TableRow>
                         </TableHeader>
 
                         <TableBody>
                             {forecast.list.slice(0,6).map((val , idx) => (
-                               <TableRow key={idx} className="h-12 border-hidden"> {/* Set a fixed height for the row */}
+                               <TableRow style={{color: `${weather_child_text}`}}  key={idx} className="h-12 border-hidden"> {/* Set a fixed height for the row */}
                                <TableCell className="h-full"> {/* Ensure cell takes full height */}
                                    <img src={weather_image_change} alt="" className="h-[35px] w-[35px]" />
                                </TableCell>
