@@ -240,7 +240,7 @@ export const SearchWeather: React.FC = () => {
         style={{ color: `${weather_child_text}` }}
         className="weather-description flex items-center text-2xl ml-6 border-b-2 xs:border-0 border-gray-300 w-7/12 font-medium xs:ml-3 xs:text-3xl"
       >
-        <Cloud className="xs:w-[20px] xs:h-[20x]"/><h1 className="xs:ml-2 ">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
+        <Cloud className="xs:w-[15px] xs:h-[15x]"/><h1 className="xs:ml-2 ">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
       </div>
 
       <div
@@ -300,7 +300,7 @@ export const SearchWeather: React.FC = () => {
                                             <Line
                                                 dataKey="y_data"
                                                 type="natural"
-                                                stroke="black"
+                                                stroke={weather_child_text}
                                                 strokeWidth={2}
                                                 dot={false}
                                             />
@@ -337,7 +337,7 @@ export const SearchWeather: React.FC = () => {
 
             <div className="lower-info w-[97%] m-auto">
                 {forecast && (
-                    <Card style={{backgroundColor : `${weather_child_change}`}} className="weather-forecast mt-2 px-2 xs:px-0 border-0 w-3/12 h-[350px] xs:w-[97%] xs:mx-auto">
+                    <Card style={{backgroundColor : `${weather_child_change}`}} className="weather-forecast mt-2 px-2 xs:px-1 border-0 w-3/12 h-[350px] xs:w-[97%] xs:mx-auto">
                     <Table>
                         <TableHeader>
                             <TableRow >
