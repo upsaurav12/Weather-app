@@ -1,0 +1,6 @@
+.chevron {
+    width: 30px;    /* Set fixed size */
+    height: 30px;   /* Set fixed size */
+    flex-shrink: 0; /* Prevent shrinking */
+    flex-grow: 0;   /* Prevent growing */
+}
