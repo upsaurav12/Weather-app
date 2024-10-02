@@ -263,7 +263,7 @@ export const SearchWeather: React.FC = () => {
   <div className="extra-info hidden xs:block mt-5">
     <ul className="grid grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
       {extra_weather.map((val, ind) => (
-        <li key={ind} className=" h-[160px] flex flex-col items-center justify-center rounded-lg shadow-md">
+        <li key={ind} style={{ color: `${weather_child_text}` }} className=" h-[160px] flex flex-col items-center justify-center rounded-lg shadow-md">
           <h3 className="text-base text-center">{val.extra_name}</h3>
           <div className="h-[20px] w-[20px] mb-2">{val.extra_icon}</div>
           <h3 className="text-center">{val.extra_val}</h3>
