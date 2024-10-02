@@ -242,7 +242,7 @@ export const SearchWeather: React.FC = () => {
                                 <CardTitle>Weather Forecast</CardTitle>
                                 <CardDescription className="w-5/12 m-auto flex justify-center">{weather_chart[nextState].weather_type_name}</CardDescription>
                                 <div className="slider-next w-full flex items-center justify-around">
-                                <ChevronLeft className="chevron xs:w-[40px] xs:h-[40px]" onClick={handlePrev}/>
+                                <ChevronLeft className="chevron xs:w-[40px] xs:h-[40px] xs:ml-2 xs:absolute xs:left-[0px]" onClick={handlePrev}/>
                                 <CardContent className="w-full">
                                     <ChartContainer config={chartConfig} className="h-[250px] w-full mt-4">
                                         <LineChart accessibilityLayer data={weather_chart[nextState].weather_type} margin={{left: 5 , right: 5}} >
@@ -268,7 +268,7 @@ export const SearchWeather: React.FC = () => {
                                         </LineChart>
                                     </ChartContainer>
                                 </CardContent>
-                                <ChevronRight className="chevron xs:w-[40px] xs:h-[40px]" onClick={handleNext}/>
+                                <ChevronRight className="chevron xs:w-[40px] xs:h-[40px] xs:mr-2 xs:absolute xs:right-[0px]" onClick={handleNext}/>
                                 </div>
                             </CardHeader>
                         </Card>
