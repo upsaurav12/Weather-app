@@ -238,21 +238,21 @@ export const SearchWeather: React.FC = () => {
       </div>
       <div
         style={{ color: `${weather_child_text}` }}
-        className="weather-description flex items-center text-2xl ml-6 border-b-2 xs:border-0 border-gray-300 w-7/12 font-medium xs:ml-10 xs:text-3xl"
+        className="weather-description flex items-center text-2xl ml-6 border-b-2 xs:border-0 border-gray-300 w-7/12 font-medium xs:ml-3 xs:text-3xl"
       >
-        <Cloud/><h1 className="xs:ml-2">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
+        <Cloud className="xs:w-[20px] xs:h-[20x]"/><h1 className="xs:ml-2 ">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
       </div>
 
       <div
         style={{ color: `${weather_child_text}` }}
-        className="time-date-location ml-6 text-sm font-medium mt-2 xs:ml-10 xs:text-[1rem] xs:m-5 xs:font-normal"
+        className="time-date-location ml-6 text-sm font-medium mt-2 xs:ml-3 xs:text-[1rem] xs:m-5 xs:font-normal xs:mt-2"
       >
         <div>
           <div className="location flex items-center">
-            <MapPin/><h1>{weather?.name}, {weather?.sys.country}</h1>
+            <MapPin className="xs:w-[15px] xs:h-[15px]"/><h1>{weather?.name}, {weather?.sys.country}</h1>
           </div>
           <div className="date-time">
-            <h1 className="flex items-center mt-2"><Calendar className="mr-1"/>{new Date(weather.dt * 1000).getDate()}{Month[new Date(weather.dt * 1000).getMonth()]},{new Date(weather.dt * 1000).getFullYear()}<Clock className="ml-2 mr-1"/>{new Date(weather.dt * 1000).getHours()}:{new Date(weather.dt * 1000).getMinutes()}
+            <h1 className="flex items-center mt-2"><Calendar className="mr-1 xs:w-[15px] xs:h-[15px]"/>{new Date(weather.dt * 1000).getDate()}{Month[new Date(weather.dt * 1000).getMonth()]},{new Date(weather.dt * 1000).getFullYear()}<Clock className="ml-2 mr-1 xs:w-[15px] xs:h-[15px]"/>{new Date(weather.dt * 1000).getHours()}:{new Date(weather.dt * 1000).getMinutes()}
             </h1>
           </div>
         </div>
