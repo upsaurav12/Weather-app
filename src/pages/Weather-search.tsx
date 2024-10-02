@@ -196,6 +196,7 @@ export const SearchWeather: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
+                            <div className="weather-description text-2xl ml-2 border-b w-7/12 font-medium xs:ml-10 xs:text-3xl">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</div>
 
                             <div className="time-date-location ml-2 text-sm font-medium mt-2 xs:ml-10 xs:text-medium">
                                     <div>
