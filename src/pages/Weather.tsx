@@ -283,23 +283,23 @@ export const Weather: React.FC = () => {
     if (error) return <div>Error: {error}</div>
     return (
         <main style={{backgroundColor: `${backgroundColor}`}} className="w-full h-full m-auto min-h-screen">
-            <Button onClick={() => navigate('/search')} className="absolute">
+            <Button onClick={() => navigate('/search')} className="">
                 <Search/>
             </Button>
-            <div className="upper-info w-[98%] min-h-[50vh] ml-8 m-auto xs:ml-0 flex xs:flex-col xs:items-center xs:w-full">
+            <div className="upper-info w-[95%] min-h-[50vh] ml-8 m-auto xs:ml-0 flex xs:flex-col xs:items-center xs:w-full">
                 <div className="extra-info-weather-overview xs:w-full xs:min-h-[60vh]">
                     {weatherData && (
-                        <div style={{color: `${textColor}`}} className="weather-overview border h-full w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
+                        <div style={{color: `${textColor}`}} className="weather-overview shadow-2xl h-[90%] w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
                         <div>
                             <div className="temperature w-full h-[150px] rounded-[1rem] flex 1xl:flex-col 1xl:items-center xs:flex-row-reverse">
                                 <div className="weather-image w-[190px] h-[190px] m-2 rounded-[1rem] flex justify-center items-center">
-                                    <img src={changeIcon(weatherData.weather[0].icon)} className='ml-4 1xl:h-[160px] 1xl:w-[160px] xs:w-[100px] xs:h-[100px] xs:mt-1' alt="" />
+                                    <img src={changeIcon(weatherData.weather[0].icon)} className='ml-4  h-[130px] w-[130px] 1xl:h-[160px] 1xl:w-[160px] xs:w-[100px] xs:h-[100px] xs:mt-1' alt="" />
                                 </div>
                                 <div className="weather-temp w-[190px] h-[190px]  m-2 mr-3  rounded-[1rem] flex justify-center items-center xs:ml-0 xs:mr-20">
                                     <h2 className="text-7xl font-base 1xl:text-5xl xs:ml-0">{weatherData.main.temp.toFixed(0)}°</h2>
                                 </div>
                             </div>
-                            <div className="all-three ml-5 mt-3">
+                            <div className="all-three ml-5 mt-6 xs:mt-3">
                                 <div className="weather-name border-b w-8/12 h-12 ml-6 flex items-end md:mt-3 xs:border-none xs:ml-2">
                                     <div className="flex items-center md:mt-4 xxs:mb-2">
                                         <TiWeatherCloudy className="xs:hidden"/>
@@ -338,20 +338,20 @@ export const Weather: React.FC = () => {
                 </div>
                     )}
                 </div>
-                <div style={{backgroundColor: `${childElementColor}`}} className="weather-info w-full border h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-[96%]  xs:rounded xs:h-[25vh] 1xl:w-8/12 xs:border-hidden xs:w-[95vw] xs:mr-1 xs:mt-9 xs:rounded-[0.75rem]">
+                <div style={{backgroundColor: `${childElementColor}`}} className="weather-info w-full  h-full ml-1 rounded-[1rem] min-h-[240px] xs:w-[96%]  xs:rounded xs:h-[25vh] 1xl:w-8/12 xs:border-hidden xs:w-[95vw] xs:mr-1 xs:mt-9 xs:rounded-[0.75rem]">
                 <div  className="h-[300px]  w-11/12 m-[40px] mt-[60px] xs:mx-1 xs:border-hidden xs:mr-8 xs:my-8 xs:h-[150px] xs:ml-4 xs:mt-12">
                     <LineChart data={data} options={options} />
                 </div>
                 </div>
             </div>
-            <div className="lower-info w-[98%] m-auto min-h-[48vh] mt-1 ml-8 flex xs:ml-0 xs:flex-col xs:mr-1 xs:text-slate-50">
-                <div style={{backgroundColor: `${childElementColor}`}}  className="weather-forecast w-[520px] border h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:rounded-[0.75rem]  xs:border-hidden xs:ml-2">
+            <div className="lower-info w-[98%] m-auto min-h-[48vh] ml-8 flex xs:ml-0 xs:flex-col xs:mr-1 xs:text-slate-50">
+                <div style={{backgroundColor: `${childElementColor}`}}  className="weather-forecast w-[520px]  h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:rounded-[0.75rem]  xs:border-hidden xs:ml-2">
                     <div className="forecast-title">
                         <h1 style={{color: `${textColor}`}} className="text-2xl font-bold ml-4 mt-4">Forecast(Next 3-hours)</h1>
 
                     </div>
 
-                    <ul className="h-5/6 mt-5">
+                    <ul className="h-5/6">
                         <div className="weather-analysis">
                         </div>
                             {forecastData && (
@@ -370,7 +370,7 @@ export const Weather: React.FC = () => {
                             )}
                         </ul>
                 </div>
-                <div className="weather-analysis h-11/12 w-9/12 border ml-1 rounded-[1rem] xs:hidden"></div>
+                <div className="weather-analysis h-11/12 w-9/12 shadow-2xl ml-1 rounded-[1rem] xs:hidden"></div>
             </div>
         </main>
     )

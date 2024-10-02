@@ -174,8 +174,8 @@ export const SearchWeather: React.FC = () => {
         console.log(weather_chart[nextState])
     }
     return (
-        <main style={{backgroundColor : `${weather_theme_change}`}} className="h-[full] w-[100vw] pt-2 pb-6 xs:w-[100vw] h-[98%] m-auto">
-            <Button className="absolute left-[20px] xs:top-[1px] xs:left-[1px]" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
+        <main style={{backgroundColor : `${weather_theme_change}`}} className=" w-[100vw] pt-2 pb-8 xs:w-[100vw] h-[98%] m-auto">
+            <Button className="xs:top-[1px] xs:left-[1px]" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
             <div className="search-container">
                 <form onSubmit={displayWeather} className="flex mt-4 w-5/12 m-auto xs:w-full">
                     <Input style={{color: `${weather_child_text}`}} className="xs:mt-6"
@@ -223,11 +223,11 @@ export const SearchWeather: React.FC = () => {
                 <div className="upper-info flex items-between justify-between xs:flex-col w-[97%] m-auto">
                 <div className="weather-info-search mt-2 w-[20%] xs:w-11/12 xs:ml-3">
                 {weather && (
-                    <div className="h-[350px] xs:border-0 border-gray-300 rounded-lg shadow-xl xs:shadow-none p-4">
+                    <div className="h-[350px] xs:border-0 border-gray-300 rounded-lg shadow-2xl xs:shadow-none p-4">
                     <div className="upper-weather-info">
                         <div className="h-[225px] flex items-center justify-around 1xl:flex-col xs:flex-row-reverse">
                         <div className="weather-image">
-                            <img src={weather_image_change} className="h-[140px] w-[140px]" alt="Weather Icon" />
+                            <img src={weather_image_change} className="h-[120px] w-[120px]" alt="Weather Icon" />
                         </div>
                         <div className="weather-temperature">
                             <h1 style={{ color: `${weather_child_text}` }} className="text-6xl xs:text-7xl xs:font-normal">
@@ -238,9 +238,9 @@ export const SearchWeather: React.FC = () => {
                     </div>
                     <div
                         style={{ color: `${weather_child_text}` }}
-                        className="weather-description flex items-center text-2xl ml-6 border-b-2 xs:border-0 border-gray-300 w-7/12 font-medium xs:ml-3 xs:text-3xl"
+                        className="weather-description mt-[-20px] flex items-center text-2xl ml-6 border-b-2 xs:border-0 border-gray-300 w-7/12 font-medium xs:ml-3 xs:text-3xl"
                     >
-                        <Cloud className="xs:w-[15px] xs:h-[15x]"/><h1 className="xs:ml-2 ">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
+                        <Cloud className="xs:w-[15px] xs:h-[15px] w-[20px] h-[20px]"/><h1 className="xs:ml-2 ">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
                     </div>
 
                     <div
@@ -249,10 +249,10 @@ export const SearchWeather: React.FC = () => {
                     >
                         <div>
                         <div className="location flex items-center">
-                            <MapPin className="xs:w-[15px] xs:h-[15px]"/><h1>{weather?.name}, {weather?.sys.country}</h1>
+                            <MapPin className="xs:w-[15px] xs:h-[15px] w-[20px] h-[20px]"/><h1>{weather?.name}, {weather?.sys.country}</h1>
                         </div>
                         <div className="date-time">
-                            <h1 className="flex items-center mt-2"><Calendar className="mr-1 xs:w-[15px] xs:h-[15px]"/>{new Date(weather.dt * 1000).getDate()}{Month[new Date(weather.dt * 1000).getMonth()]},{new Date(weather.dt * 1000).getFullYear()}<Clock className="ml-2 mr-1 xs:w-[15px] xs:h-[15px]"/>{new Date(weather.dt * 1000).getHours()}:{new Date(weather.dt * 1000).getMinutes()}
+                            <h1 className="flex items-center mt-2"><Calendar className="mr-1 xs:w-[15px] xs:h-[15px] w-[20px] h-[20px]"/>{new Date(weather.dt * 1000).getDate()}{Month[new Date(weather.dt * 1000).getMonth()]},{new Date(weather.dt * 1000).getFullYear()}<Clock className="ml-2 mr-1 xs:w-[15px] xs:h-[15px] w-[20px] h-[20px]"/>{new Date(weather.dt * 1000).getHours()}:{new Date(weather.dt * 1000).getMinutes()}
                             </h1>
                         </div>
                         </div>
@@ -349,7 +349,7 @@ export const SearchWeather: React.FC = () => {
                         </TableHeader>
 
                         <TableBody>
-                            {forecast.list.slice(0,6).map((val , idx) => (
+                            {forecast.list.slice(0,5).map((val , idx) => (
                                <TableRow style={{color: `${weather_child_text}`}}  key={idx} className="h-12 border-hidden"> {/* Set a fixed height for the row */}
                                <TableCell className="h-full"> {/* Ensure cell takes full height */}
                                    <img src={weather_image_change} alt="" className="h-[35px] w-[35px]" />
