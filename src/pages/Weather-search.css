@@ -4,3 +4,7 @@
     flex-shrink: 0; /* Prevent shrinking */
     flex-grow: 0;   /* Prevent growing */
 }
+
+.no-border {
+    border: none !important; /* Important to override other styles */
+}

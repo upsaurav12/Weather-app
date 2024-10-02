@@ -7,8 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { House } from "lucide-react";
 import { ChevronRight , ChevronLeft } from 'lucide-react';
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import { extraWeather , convertUnixToTime} from "../component/WeatherConstant";
 import { Table,TableBody,TableCell,TableHead,TableHeader,TableRow,} from "../components/ui/table"
 import { weather_image } from "../component/WeatherConstant";
+import { Thermometer } from 'lucide-react';
+import { Sunrise } from 'lucide-react';
+import { Droplets } from 'lucide-react';
+import { Wind } from 'lucide-react';
 import './Weather-search.css'
 
 import {
@@ -35,6 +40,13 @@ export const SearchWeather: React.FC = () => {
     const [nextState , setNext] = useState(0);
     const apiKey = import.meta.env.VITE_API_TOKEN;
     const Month = ["Jan", "Feb", "Mar", "April", "May", "Jun" , "July", "Aug" , "Sept" , "Oct", "Nov" , "Dec"]
+
+    const extra_weather:extraWeather[] = [
+        {extra_name: "Wind Speed" , extra_icon: <Wind/> , extra_val: weather?.wind.speed + "Km/h"},
+        {extra_name: "Humidity", extra_icon: <Droplets/> , extra_val:  weather?.main.humidity},
+        {extra_name: "Sunrise", extra_icon: <Sunrise/> , extra_val: convertUnixToTime(weather?.sys.sunrise)},
+        {extra_name: "Feels Like", extra_icon: <Thermometer/> , extra_val: weather?.main.feels_like}
+    ]
 
     const humidity_chart = forecast?.list.slice(0,10).map((i) => {
         return{
@@ -136,8 +148,8 @@ export const SearchWeather: React.FC = () => {
         console.log(weather_chart[nextState])
     }
     return (
-        <main className="border h-[98vh] w-[98vw] h-[98%] mt-2 m-auto">
-            <Button className="absolute" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
+        <main  className="h-[full] w-[98vw] h-[98%] mt-2 m-auto">
+            <Button className="absolute xs:top-[1px]" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
             <div className="search-container">
                 <form onSubmit={displayWeather} className="flex mt-4 w-5/12 m-auto xs:w-full">
                     <Input className="xs:mt-6"
@@ -183,22 +195,22 @@ export const SearchWeather: React.FC = () => {
                 // Show weather data and analysis when data is loaded
                 <>
                 <div className="upper-info flex items-between justify-between xs:flex-col">
-                    <div className="weather-info mt-2 w-[20%] xs:w-full xs:mt-2">
+                    <div className="weather-info-search mt-2 w-[20%] xs:w-11/12 xs:ml-3">
                         {weather && (
-                            <Card className="h-[350px]">
+                            <div className="h-[350px] xs:border-0 border rounded-[0.87rem] shadow-1 xs:shadow-0">
                             <div className="upper-weather-info">
                                 <div className="h-[225px] flex items-center justify-around 1xl:flex-col xs:flex-row-reverse">
                                     <div className="weather-image">
                                         <img src={weather_image_change} className="h-[140px] w-[140px]"  />
                                     </div>
                                     <div className="weather-temperature">
-                                        <h1 className="text-6xl xs:text-7xl xs:font-base">{weather?.main.temp.toFixed(0)}°</h1>
+                                        <h1 className="text-6xl xs:text-7xl xs:font-normal">{weather?.main.temp.toFixed(0)}°</h1>
                                     </div>
                                 </div>
                             </div>
                             <div className="weather-description text-2xl ml-2 border-b w-7/12 font-medium xs:ml-10 xs:text-3xl">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</div>
 
-                            <div className="time-date-location ml-2 text-sm font-medium mt-2 xs:ml-10 xs:text-medium">
+                            <div className="time-date-location ml-2 text-sm font-medium mt-2 xs:ml-10 xs:text-medium xs:m-5 xs:font-normal">
                                     <div>
                                         <div className="location">
                                     <h1>{weather?.name}, {weather?.sys.country}</h1>
@@ -209,10 +221,21 @@ export const SearchWeather: React.FC = () => {
                                 </div>
                                     </div>
                             </div>
-                        </Card>
+                        </div>
                         )}
+                        <div className="extra-info hidden xs:block mt-5">
+                        <ul className="grid  grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
+                            {extra_weather.map((val, ind) => (
+                                <li key={ind} className="border h-[160px] flex flex-col items-center justify-center rounded-[0.75rem]">
+                                    <h3 className="text-base text-center">{val.extra_name}</h3>
+                                    <div className="h-[20px] w-[20px] mb-2" >{val.extra_icon}</div>
+                                    <h3 className="text-center">{val.extra_val}</h3>
+                                </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                    <div className="weather-analytics w-10/12 xs:w-full">
+                    <div className="weather-analytics w-10/12 xs:w-[96%] xs:m-auto">
                         {weather_chart && (
                             <Card className="h-[349px] ml-2 mt-2 xs:ml-0">
                             <CardHeader>
