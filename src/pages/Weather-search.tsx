@@ -178,7 +178,7 @@ export const SearchWeather: React.FC = () => {
             <Button className="absolute left-[20px] xs:top-[1px] xs:left-[1px]" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
             <div className="search-container">
                 <form onSubmit={displayWeather} className="flex mt-4 w-5/12 m-auto xs:w-full">
-                    <Input className="xs:mt-6"
+                    <Input style={{color: `${weather_child_text}`}} className="xs:mt-6"
                         placeholder="Enter your location..." 
                         value={city} 
                         onChange={(e) => setCity(e.target.value)} 
@@ -214,64 +214,64 @@ export const SearchWeather: React.FC = () => {
             ) : null}*/}
 
 
-{loading ? (
+                {loading ? (
                 // Render Loading or Skeleton component when fetching data
-                <p>Loading...</p>
-            ) : weather && forecast ? (
+                <p style={{color: `${weather_child_text}`}} className="xs:flex xs:justify-center xs:items-center">Loading...</p>
+                ) : weather && forecast ? (
                 // Show weather data and analysis when data is loaded
                 <>
                 <div className="upper-info flex items-between justify-between xs:flex-col w-[97%] m-auto">
                 <div className="weather-info-search mt-2 w-[20%] xs:w-11/12 xs:ml-3">
-  {weather && (
-    <div className="h-[350px] xs:border-0 border-gray-300 rounded-lg shadow-xl xs:shadow-none p-4">
-      <div className="upper-weather-info">
-        <div className="h-[225px] flex items-center justify-around 1xl:flex-col xs:flex-row-reverse">
-          <div className="weather-image">
-            <img src={weather_image_change} className="h-[140px] w-[140px]" alt="Weather Icon" />
-          </div>
-          <div className="weather-temperature">
-            <h1 style={{ color: `${weather_child_text}` }} className="text-6xl xs:text-7xl xs:font-normal">
-            {weather?.main.temp.toFixed(0)}°
-            </h1>
-          </div>
-        </div>
-      </div>
-      <div
-        style={{ color: `${weather_child_text}` }}
-        className="weather-description flex items-center text-2xl ml-6 border-b-2 xs:border-0 border-gray-300 w-7/12 font-medium xs:ml-3 xs:text-3xl"
-      >
-        <Cloud className="xs:w-[15px] xs:h-[15x]"/><h1 className="xs:ml-2 ">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
-      </div>
+                {weather && (
+                    <div className="h-[350px] xs:border-0 border-gray-300 rounded-lg shadow-xl xs:shadow-none p-4">
+                    <div className="upper-weather-info">
+                        <div className="h-[225px] flex items-center justify-around 1xl:flex-col xs:flex-row-reverse">
+                        <div className="weather-image">
+                            <img src={weather_image_change} className="h-[140px] w-[140px]" alt="Weather Icon" />
+                        </div>
+                        <div className="weather-temperature">
+                            <h1 style={{ color: `${weather_child_text}` }} className="text-6xl xs:text-7xl xs:font-normal">
+                            {weather?.main.temp.toFixed(0)}°
+                            </h1>
+                        </div>
+                        </div>
+                    </div>
+                    <div
+                        style={{ color: `${weather_child_text}` }}
+                        className="weather-description flex items-center text-2xl ml-6 border-b-2 xs:border-0 border-gray-300 w-7/12 font-medium xs:ml-3 xs:text-3xl"
+                    >
+                        <Cloud className="xs:w-[15px] xs:h-[15x]"/><h1 className="xs:ml-2 ">{weather?.weather[0].description.charAt(0).toUpperCase() + weather.weather[0].description.slice(1)}</h1>
+                    </div>
 
-      <div
-        style={{ color: `${weather_child_text}` }}
-        className="time-date-location ml-6 text-sm font-medium mt-2 xs:ml-3 xs:text-[1rem] xs:m-5 xs:font-normal xs:mt-2"
-      >
-        <div>
-          <div className="location flex items-center">
-            <MapPin className="xs:w-[15px] xs:h-[15px]"/><h1>{weather?.name}, {weather?.sys.country}</h1>
-          </div>
-          <div className="date-time">
-            <h1 className="flex items-center mt-2"><Calendar className="mr-1 xs:w-[15px] xs:h-[15px]"/>{new Date(weather.dt * 1000).getDate()}{Month[new Date(weather.dt * 1000).getMonth()]},{new Date(weather.dt * 1000).getFullYear()}<Clock className="ml-2 mr-1 xs:w-[15px] xs:h-[15px]"/>{new Date(weather.dt * 1000).getHours()}:{new Date(weather.dt * 1000).getMinutes()}
-            </h1>
-          </div>
-        </div>
-      </div>
-    </div>
-  )}
+                    <div
+                        style={{ color: `${weather_child_text}` }}
+                        className="time-date-location ml-6 text-sm font-medium mt-2 xs:ml-3 xs:text-[1rem] xs:m-5 xs:font-normal xs:mt-2"
+                    >
+                        <div>
+                        <div className="location flex items-center">
+                            <MapPin className="xs:w-[15px] xs:h-[15px]"/><h1>{weather?.name}, {weather?.sys.country}</h1>
+                        </div>
+                        <div className="date-time">
+                            <h1 className="flex items-center mt-2"><Calendar className="mr-1 xs:w-[15px] xs:h-[15px]"/>{new Date(weather.dt * 1000).getDate()}{Month[new Date(weather.dt * 1000).getMonth()]},{new Date(weather.dt * 1000).getFullYear()}<Clock className="ml-2 mr-1 xs:w-[15px] xs:h-[15px]"/>{new Date(weather.dt * 1000).getHours()}:{new Date(weather.dt * 1000).getMinutes()}
+                            </h1>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                )}
 
-  <div className="extra-info hidden xs:block mt-5">
-    <ul className="grid grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
-      {extra_weather.map((val, ind) => (
-        <li key={ind} style={{ color: `${weather_child_text}` }} className=" h-[160px] flex flex-col items-center justify-center rounded-lg shadow-md">
-          <h3 className="text-base text-center">{val.extra_name}</h3>
-          <div className="h-[20px] w-[20px] mb-2">{val.extra_icon}</div>
-          <h3 className="text-center">{val.extra_val}</h3>
-        </li>
-      ))}
-    </ul>
-  </div>
-</div>
+                <div className="extra-info hidden xs:block mt-5">
+                    <ul className="grid grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
+                    {extra_weather.map((val, ind) => (
+                        <li key={ind} style={{ color: `${weather_child_text}` }} className=" h-[160px] flex flex-col items-center justify-center rounded-lg shadow-2xl">
+                        <h3 className="text-base text-center">{val.extra_name}</h3>
+                        <div className="h-[20px] w-[20px] mb-2">{val.extra_icon}</div>
+                        <h3 className="text-center">{val.extra_val}</h3>
+                        </li>
+                    ))}
+                    </ul>
+                </div>
+                </div>
 
                     <div className="weather-analytics w-10/12 xs:w-[96%] xs:m-auto">
                         {weather_chart && (

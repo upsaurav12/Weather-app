@@ -14,7 +14,7 @@ import { Button } from "../components/ui/button";
 //import Humidity from '../assets/Humidity.svg';
 //import UV from '../assets/UV.svg'
 import { Thermometer } from 'lucide-react';
-import { Sunrise } from 'lucide-react';
+import { Sunrise , Sunset} from 'lucide-react';
 import { Droplets } from 'lucide-react';
 import { Wind } from 'lucide-react';
 import { Search } from "lucide-react";
@@ -28,6 +28,8 @@ export const Weather: React.FC = () => {
     const [location, setLocation] = useState<{ lat: number, lon: number } | null>(null); // Store user location
     const forecastArray = forecastData?.list.slice(0,11).map((i)=> (new Date(i.dt * 1000).getHours()))
     const labels = forecastArray?.map(item => item.toString()) || [];
+    const getCurrentUnixTime = () => Math.floor(new Date().getTime() / 1000);
+    const isDay = weatherData && getCurrentUnixTime() >= weatherData.sys.sunrise && getCurrentUnixTime() <= weatherData.sys.sunset;
     //const forecastTemp = forecastData?.list.slice(0,10).map((i) => i.main.temp)
     const forecastHumidity = forecastData?.list.slice(0,11).map((i) => i.main.humidity) || []
     /*
@@ -73,9 +75,9 @@ export const Weather: React.FC = () => {
 
     const extra_weather:extraWeather[] = [
         {extra_name: "Wind Speed" , extra_icon: <Wind/> , extra_val: weatherData?.wind.speed + "Km/h"},
-        {extra_name: "Humidity", extra_icon: <Droplets/> , extra_val:  weatherData?.main.humidity},
-        {extra_name: "Sunrise", extra_icon: <Sunrise/> , extra_val: convertUnixToTime(weatherData?.sys.sunrise)},
-        {extra_name: "Feels Like", extra_icon: <Thermometer/> , extra_val: weatherData?.main.feels_like}
+        {extra_name: "Humidity", extra_icon: <Droplets/> , extra_val:  weatherData?.main.humidity + "g/Kg"},
+        isDay ? { extra_name: "Sunset", extra_icon: <Sunset />, extra_val: convertUnixToTime(weatherData?.sys.sunset) + " PM"} : { extra_name: "Sunrise", extra_icon: <Sunrise />, extra_val: convertUnixToTime(weatherData?.sys.sunrise) + " AM" },
+        {extra_name: "Feels Like", extra_icon: <Thermometer/> , extra_val: weatherData?.main.feels_like + "°"}
     ]
 
     const data = {
@@ -325,7 +327,7 @@ export const Weather: React.FC = () => {
                         <div className="extra-info hidden xs:block mt-4">
                         <ul className="grid  grid-rows-2 grid-cols-2 gap-4 h-[350px] w-11/12 m-auto text-[12px]">
                             {extra_weather.map((val, ind) => (
-                                <li key={ind} className="border h-[160px] flex flex-col items-center justify-center rounded-[0.75rem]">
+                                <li key={ind} className="h-[160px] flex flex-col items-center justify-center rounded-[0.75rem] shadow-2xl">
                                     <h3 className="text-base text-center">{val.extra_name}</h3>
                                     <div className="h-[20px] w-[20px] mb-2" >{val.extra_icon}</div>
                                     <h3 className="text-center">{val.extra_val}</h3>
