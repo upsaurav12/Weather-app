@@ -174,10 +174,10 @@ export const SearchWeather: React.FC = () => {
         console.log(weather_chart[nextState])
     }
     return (
-        <main style={{backgroundColor : `${weather_theme_change}`}} className=" w-[100vw] pt-10 xs:w-[100vw] h-[98%] m-auto">
+        <main style={{backgroundColor : `${weather_theme_change}`}} className=" w-[100vw] pt-6 pb-4 xs:w-[100vw] h-[98%] m-auto">
             <Button className="xs:top-[1px] xs:left-[1px]" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
             <div className="search-container">
-                <form onSubmit={displayWeather} className="flex mt-4 w-5/12 m-auto xs:w-full">
+                <form onSubmit={displayWeather} className="flex mt-4 w-5/12 m-auto xs:w-11/12">
                     <Input style={{color: `${weather_child_text}`}} className="xs:mt-6"
                         placeholder="Enter your location..." 
                         value={city} 
@@ -223,9 +223,9 @@ export const SearchWeather: React.FC = () => {
                 <div className="upper-info flex items-between justify-between xs:flex-col w-[97%] m-auto">
                 <div className="weather-info-search mt-2 w-[20%] xs:w-11/12 xs:ml-3">
                 {weather && (
-                    <div className="h-[350px] xs:border-0 border-gray-300 rounded-lg shadow-2xl xs:shadow-none p-4">
+                    <div className="h-[350px] xs:border-0 border-gray-300 rounded-lg p-4">
                     <div className="upper-weather-info">
-                        <div className="h-[225px] flex items-center justify-around 1xl:flex-col xs:flex-row-reverse">
+                        <div className="h-[225px] flex items-center mt-[-25px] xs:mt-[0px] justify-around 1xl:flex-col xs:flex-row-reverse">
                         <div className="weather-image">
                             <img src={weather_image_change} className="h-[120px] w-[120px]" alt="Weather Icon" />
                         </div>
@@ -282,7 +282,7 @@ export const SearchWeather: React.FC = () => {
                                 <div className="slider-next w-full flex items-center justify-around">
                                 <ChevronLeft className="chevron xs:w-[40px] xs:h-[40px] xs:ml-2 xs:absolute xs:left-[0px]" onClick={handlePrev}/>
                                 <CardContent className="w-full">
-                                    <ChartContainer config={chartConfig} className="h-[250px] w-full mt-4">
+                                    <ChartContainer config={chartConfig} className="h-[250px] w-full mt-2">
                                         <LineChart accessibilityLayer data={weather_chart[nextState].weather_type} margin={{left: 5 , right: 5}} >
                                             <CartesianGrid vertical={false} />
                                             <XAxis
