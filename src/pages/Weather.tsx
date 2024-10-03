@@ -289,7 +289,7 @@ export const Weather: React.FC = () => {
             <div className="upper-info w-[95%] min-h-[50vh] ml-8 m-auto xs:ml-0 flex xs:flex-col xs:items-center xs:w-full">
                 <div className="extra-info-weather-overview xs:w-full xs:min-h-[60vh]">
                     {weatherData && (
-                        <div style={{color: `${textColor}`}} className="weather-overview shadow-2xl h-[90%] w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
+                        <div style={{color: `${textColor}`}} className="weather-overview shadow-2xl xs:shadow-none h-[90%] w-[400px] rounded-[1rem] xs:min-h-[650px] xs:w-11/12 xs:h-[28vh] xs:rounded xs:border-hidden xs:text-slate-100">
                         <div>
                             <div className="temperature w-full h-[150px] rounded-[1rem] flex 1xl:flex-col 1xl:items-center xs:flex-row-reverse">
                                 <div className="weather-image w-[190px] h-[190px] m-2 rounded-[1rem] flex justify-center items-center">
@@ -344,7 +344,7 @@ export const Weather: React.FC = () => {
                 </div>
                 </div>
             </div>
-            <div className="lower-info w-[98%] m-auto min-h-[48vh] ml-8 flex xs:ml-0 xs:flex-col xs:mr-1 xs:text-slate-50">
+            <div className="lower-info w-[98%] xs:mt-3 m-auto min-h-[48vh] ml-8 flex xs:ml-0 xs:flex-col xs:mr-1 xs:text-slate-50">
                 <div style={{backgroundColor: `${childElementColor}`}}  className="weather-forecast w-[520px]  h-11/12 rounded-[1rem] xs:rounded xs:w-[94.5vw] xs:rounded-[0.75rem]  xs:border-hidden xs:ml-2">
                     <div className="forecast-title">
                         <h1 style={{color: `${textColor}`}} className="text-2xl font-bold ml-4 mt-4">Forecast(Next 3-hours)</h1>
