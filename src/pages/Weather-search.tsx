@@ -174,7 +174,7 @@ export const SearchWeather: React.FC = () => {
         console.log(weather_chart[nextState])
     }
     return (
-        <main style={{backgroundColor : `${weather_theme_change}`}} className=" w-[100vw] pt-6 pb-4 xs:w-[100vw] h-[98%] m-auto">
+        <main style={{backgroundColor : `${weather_theme_change}`}} className=" w-[100vw] min-h-screen xs:w-[100vw] h-[98%] m-auto">
             <Button className="xs:top-[1px] xs:left-[1px]" onClick={() => navigate("/")}><House/></Button> {/* Navigate button */}
             <div className="search-container">
                 <form onSubmit={displayWeather} className="flex mt-4 w-5/12 m-auto xs:w-11/12">
